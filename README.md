@@ -1,12 +1,14 @@
 # Team-Scales
 
 Roles:
-UX/UI designer: Andy Flores
+Andy Flores: UX/UI Designer
 
-Janelle Brown: Data modeler 
+Janelle Brown: Data Modeler 
 
-Dominick Kilbert: Document keeper 
+Dominick Kilbert: Document Keeper 
 
 Jonatha Nketsiah: Testing Lead 
 
-Aboubacar Conde:lead programmer 
+Aboubacar Conde: Lead Programmer 
+
+Nicholas Addington: Team Manager and Client Liason
