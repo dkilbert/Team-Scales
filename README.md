@@ -1,6 +1,7 @@
 # Team-Scales
 
 Roles:
+
 Andy Flores: UX/UI Designer
 
 Janelle Brown: Data Modeler 
