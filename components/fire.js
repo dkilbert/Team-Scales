@@ -5,14 +5,12 @@ import firebase from 'firebase';
 
 // MODIFY ONLY THIS OBJECT TO CONNECT YOUR APP TO FIREBASE
 const firebaseConfig = {
-  apiKey: "AIzaSyCXi33c0BFCA-IMv6jVSOkir86liMYfjzE",
-  authDomain: "weight-exchange-app.firebaseapp.com",
-  databaseURL: "https://weight-exchange-app-default-rtdb.firebaseio.com",
-  projectId: "weight-exchange-app",
-  storageBucket: "weight-exchange-app.appspot.com",
-  messagingSenderId: "983057436016",
-  appId: "1:983057436016:web:15710452de79f85376d3b5",
-  measurementId: "G-R8H0JNCDKC"
+  apiKey: "AIzaSyBCN4opwV9IXKQmzjuwGMVKsv9DoFv2e4Y",
+  authDomain: "weight-exchange-app-9580c.firebaseapp.com",
+  projectId: "weight-exchange-app-9580c",
+  storageBucket: "weight-exchange-app-9580c.appspot.com",
+  messagingSenderId: "314575511912",
+  appId: "1:314575511912:web:114bcbba1f4d67b1eb76dd"
 };
 // ONLY TOUCH THIS ^^^^^^^^^
 

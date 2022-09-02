@@ -2,9 +2,9 @@ import fire from '../../components/fire';
 // background function for api response for the barcode scanner
 export async function sendApiRequest(UPC) {
     // application identifiers for edamam
-    let APP_ID = "7eb48d51";
+    let APP_ID = "77720ddb";
     //app access key for edamam
-    let API_KEY = "cb6a83dcd06f77840ba49f484581f3b0";
+    let API_KEY = "0ff8d1e9dacd82135e02e736b58027a5";
     //waits for the api server to return a response and presents a return json file with all food info
     await fetch('https://api.edamam.com/api/food-database/v2/parser?upc=' + UPC + '&app_id=' + APP_ID + '&app_key='+ API_KEY).then(response => {
         return response.json();
