@@ -14,7 +14,7 @@
 * **Jonathan Nketsiah**
   * Testing Lead 
 
-* **Aboubacar Conde**
+* **Aboubacar Conde**💫
   * Lead Programmer 
 
 * **Nicholas Addington** :zap:
