@@ -8,7 +8,7 @@
 * **Janelle Brown**
   * Data Modeler 
 
-* **Dominick Kilbert**
+* **Dominick Kilbert** <p>&#x1F525</p>
   * Document Lead 
 
 * **Jonathan Nketsiah**
