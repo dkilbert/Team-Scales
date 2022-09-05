@@ -31,3 +31,12 @@ The goal of this app should gain motivation from others with similar goals to en
 <details><summary>Expand</summary>
   https://github.com/dkilbert/Team-Scales
   </details>
+
+
+# Communication Tools
+<details><summary>Expand</summary>
+  Microsoft Teams
+  Discord
+  </details>
+  
+  
