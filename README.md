@@ -2,7 +2,7 @@
 
 ### Team Roles
 
-* **Andy Flores** 
+* **Andy Flores** :boom:
   * UX/UI Designer
 
 * **Janelle Brown**
