@@ -1,6 +1,6 @@
 # Team-Scales
 
-## Team Roles
+### Team Roles
 
 * **Andy Flores** 
   * UX/UI Designer
