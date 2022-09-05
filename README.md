@@ -32,7 +32,12 @@ The goal of this app should gain motivation from others with similar goals to en
   https://github.com/dkilbert/Team-Scales
   </details>
 
-
+# Jira
+<details><summary>Expand</summary>
+  https://jira.ggc.edu/projects/TS/summary
+  </details>
+  
+  
 # Communication Tools
 <details><summary>Expand</summary>
   Microsoft Teams
