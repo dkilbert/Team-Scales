@@ -22,8 +22,8 @@
 
 # Description
 <details><summary>Expand</summary>
-Team Scales and Dr. Ramata team up to create an app to motivate people to meet their weight management goals.
-The goal of this app should gain motivation from others with similar goals to encourage them to continue their goals.
+Team Scales and Dr. Cisse team up to create an app to motivate people to meet their weight management goals.
+The purpose of this app should gain motivation from others with similar goals to encourage them to continue their weight loss or weight gain journey.
 </details>
 
 
