@@ -1,6 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { Component } from 'react'
-import { View, Text, TextInput, Image, Alert, TouchableOpacity, Platform, Pressable } from 'react-native'
+import { View, Text, Button, Image, Alert, TouchableOpacity, Platform, Pressable } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import RNPickerSelect from 'react-native-picker-select';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,6 +8,11 @@ import colors from '../../assets/colors/colors';
 import styles from '../../assets/styles/styles';
 import AuthTextInput from '../AuthTextInput';
 import backButton from '../../assets/images/backButton.png'
+import fire from '../fire'
+import { ImageBackground } from 'react-native-web';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { TextInput } from 'react-native-gesture-handler';
 
 export default class CreateProfile extends Component {
 
@@ -26,22 +31,53 @@ export default class CreateProfile extends Component {
             inches: '',
             weight: '',
             bmi: '',
+            purpose: '',
+            id: '',
             hobbies: '',
         }
+        this.onCreateProfile = this.onCreateProfile.bind(this)
     }
 
-    // TODO: Verification that all data is valid and not empty
-    // onCreateProfile() - This function passes the user attributes as props to ChoosePurpose and
-    // navigates to ChoosePurpose page to continue registration
+    // onCreateProfile() - create a new user in firebase collection users with the entered data and
+    // navigates to Log page to begin using the app!
     onCreateProfile = () => {
-        // Retrieves the values for each attribute from the state
-        const { email, password, first_name, last_name, sex, age, feet, inches, weight, hobbies } = this.state;
+        // retrieves all user attributes from the state to persist to database
+        const { email, password, first_name, last_name, sex, age, feet, inches, weight, bmi, purpose, hobbies } = this.state;
 
         // Calculate the bmi for the user given the user attributes
         let bmiCalc = this.calcBMI();
 
-        // Navigate user to ChoosePurpose
-        this.props.navigation.navigate("ChoosePurpose", { email: email, password: password, first_name: first_name, last_name: last_name, sex: sex, age: age, feet: feet, inches: inches, weight: weight, bmi: bmiCalc, hobbies: hobbies });
+        // firebase write doc
+        fire.auth().createUserWithEmailAndPassword(email, password).then((result) => {
+            fire.firestore().collection("users")
+            .doc(fire.auth().currentUser.uid)
+            .set({
+                first_name,
+                last_name,
+                sex,
+                age,
+                feet,
+                inches,
+                weight,
+                bmi,
+                purpose,
+                hobbies,
+                profilePicId: 'https://firebasestorage.googleapis.com/v0/b/weightexchangeapplication.appspot.com/o/image%2Fdefault-avatar.jpg?alt=media&token=057e9e50-5f95-4123-967c-ede0dea7076a',
+                id: fire.auth().currentUser.uid,
+            }).then(() => {
+                console.log("Document successfully written!");
+                this.setState({ bmi: bmi });
+            })
+            .catch((error) => {
+                console.error("Error writing document: ", error);
+            })
+        }).catch((error) => {
+            console.log(error);
+            Alert.alert('Error', error.message, [{text: 'OK'},], {cancelable: true});
+        })
+
+        // Navigate user to Log/Home Page
+        this.props.navigation.navigate("Log", { email: email, password: password, first_name: first_name, last_name: last_name, sex: sex, age: age, feet: feet, inches: inches, weight: weight, bmi: bmiCalc, hobbies: hobbies });
     }
 
     // calcBMI() - Calculates a User's BMI given the user input to store in the database to determine caloric intake
@@ -50,11 +86,9 @@ export default class CreateProfile extends Component {
         return ((this.state.weight * 703) / (totalHeight * totalHeight)).toFixed(2);
     }
 
-
-    // TODO: Rename function to something more meaningful (validateData, or validateInformation)
     // validateNumbers() - This function validates the proper input from the user when inputting fields
-    validateNumbers = () => {
-        const { first_name, last_name, sex, age, feet, inches, weight, hobbies } = this.state;
+    validateUserData = () => {
+        const { first_name, last_name, sex, age, feet, inches, weight, purpose, hobbies } = this.state;
         let errorMsg = 'Invalid fields:';
         let isError = false;
 
@@ -83,6 +117,11 @@ export default class CreateProfile extends Component {
             errorMsg += '\nWeight';
             isError = true;
         }
+        //Check if purpose section is empty
+        if (purpose == '' || purpose == 'Would you like to donate weight, or receive weight?'){
+            errorMsg += '\nSelect a Purpose: Donate or Recieve Weight';
+            isError = true;
+        }
         //Check if hobbies section is empty
         if (hobbies == '') {
             errorMsg += '\nHobbies';
@@ -105,7 +144,6 @@ export default class CreateProfile extends Component {
     render() {
         // Destructure email and password from state to have access to these values
         const { navigate } = this.props.navigation;
-
         return (
             <View style={styles.container}>
                 <LinearGradient
@@ -119,105 +157,148 @@ export default class CreateProfile extends Component {
                             scrollEnabled={false}
                         // contentContainerStyle={ Platform.OS === "ios" ? styles.ios : {} }
                         >
-                            <View style={{ width: '18%', height: 50 }}>
+                             <View style={{ width: '18%', height: 50 }}>
                                 <Pressable onPress={() => this.props.navigation.navigate("Register")}
                                     style={{ marginTop: 5, marginLeft: 5, flexDirection: 'row' }}>
                                     <Image source={backButton} style={{ width: 20, height: 20 }} />
-                                    <Text style={{ marginTop: 0, color: 'white' }}>Go back</Text>
+                                    <Text style={{ marginTop: 0, color: 'black' }}>Go back</Text>
                                 </Pressable>
                             </View>
-                            <Text style={{
-                                color: '#FFF',
-                                fontSize: 16,
-                                fontFamily: 'Montserrat-SemiBold',
-                                marginLeft: '30%',
-                                marginBottom: '7%'
-                            }}>Profile Information</Text>
-                            <View style={{ alignItems: 'center' }}>
-                                <TouchableOpacity onPress={() => this.props.navigation.navigate("AddContainer")}>
-                                    <Image
-                                        source={require('../../assets/images/default_profile.jpg')}
-                                        style={styles.DefaultProfile}
-                                    />
-                                </TouchableOpacity>
-                            </View>
+                            <View style = {styles.container}>
+                                <View style = {{margin: 20}}>
+                                    <View style = {{alignItems: 'center'}}>
+                                        <TouchableOpacity onPress={() => this.props.navigation.navigate("AddContainer")}>
+                                            <View style={{
+                                                height: 100,
+                                                width: 100,
+                                                borderRadius: 15,
+                                                justifyContent: 'center',
+                                                alignItems:'center',
+                                            }}>
+                                                <ImageBackground
+                                                source={require('../../assets/images/default_profile.jpg')}
+                                                style ={{height: 100, width: 100}}
+                                                imageStyle={{borderRadius: 15}}
+                                                >
+                                                    <View style ={{
+                                                        flex: 1,
+                                                        justifyContent: 'center',
+                                                        alignItems: 'center',
+                                                    }}>
+                                                        <Icon name="camera" size={35} color="fff" style={{
+                                                            opacity: 0.5,
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            borderWidth: 1,
+                                                            borderColor: '#fff',
+                                                            borderRadius: 10,
+                                                        }} />
+                                                    </View>
+                                                </ImageBackground>
+                                            </View>
+                                        </TouchableOpacity>
+                                        <Text style ={{marginTop: 10, fontSize: 18, fontWeight: 'bold'}}>
+                                            Create Profile
+                                        </Text>
+                                    </View>
 
-                            
-                            <View style={styles.loginPrompt}>
-                                <View style={styles.AuthTextInputRow}>
-                                    <AuthTextInput
-                                        style={styles.AuthTextInputContainerSmall}
-                                        onChangeText={first_name => this.setState({ first_name })}>
-                                        First</AuthTextInput>
-                                    <AuthTextInput
-                                        style={styles.AuthTextInputContainerSmall}
-                                        onChangeText={last_name => this.setState({ last_name })}>
-                                        Last</AuthTextInput>
-                                </View>
-
-                                   
-                                <View style={styles.AuthTextInputRow}>
-                                    <View style={styles.AuthTextInputContainerSmall}>
-                                        <Text style={styles.AuthTextInputText}>Sex</Text>
+                                    <View style={styles.action}>
+                                        <FontAwesome name="user" size={20} />
+                                        <TextInput
+                                            placeholder='First Name'
+                                            onChangeText={first_name => this.setState({ first_name })}
+                                            placeholderTextColor="#000000"
+                                            autoCorrect={false}
+                                            style={styles.textInput}
+                                        />
+                                    </View>
+                                    <View style={styles.action}>
+                                        <FontAwesome name="user" size={20} />
+                                        <TextInput
+                                            placeholder='Last'
+                                            onChangeText={last_name => this.setState({ last_name })}
+                                            placeholderTextColor="#000000"
+                                            autoCorrect={false}
+                                            style={styles.textInput}
+                                        />
+                                    </View>
+                                    <View style={styles.action}>
+                                        <FontAwesome name="venus-mars" size={20} />
+                                        <Text style = {styles.textInput}>
+                                                Sex
+                                            </Text>
                                         <RNPickerSelect
-                                            style={styles.AuthTextInputContainerSmall}
-                                            // placeholder = {{label:'Select your sex...', value: ''}}
                                             items={[{ label: 'Male', value: 'male' }, { label: 'Female', value: 'female' }]}
                                             onValueChange={sex => this.setState({ sex })}
                                             returnKeyType='done'
                                         />
                                     </View>
-
-                                      
-                                    <AuthTextInput
-                                        style={styles.AuthTextInputContainerSmall}
-                                        onChangeText={age => this.setState({ age })}>
-                                        Age</AuthTextInput>
-                                </View >
-
-                                  
-                                <Text style={styles.textRegularHeading}>Height</Text>
-                                <View style={styles.AuthTextInputRow}>
-
-                                    <View style={styles.AuthTextInputRow}>
-                                        <AuthTextInput
-                                            style={styles.AuthTextInputContainerSmall}
-                                            onChangeText={feet => this.setState({ feet })}>
-                                            Feet</AuthTextInput>
-                                        <AuthTextInput
-                                            style={styles.AuthTextInputContainerSmall}
-                                            onChangeText={inches => this.setState({ inches })}>
-                                            Inches</AuthTextInput>
+                                    <View style={styles.action}>
+                                        <FontAwesome name="birthday-cake" size={20} />
+                                        <TextInput
+                                            placeholder='Age'
+                                            onChangeText={age => this.setState({ age })}
+                                            placeholderTextColor="#000000"
+                                            autoCorrect={false}
+                                            style={styles.textInput}
+                                        />
                                     </View>
+                                    <View style={styles.action}>
+                                        <FontAwesome name="id-card" size={20} />
+                                        <TextInput
+                                            placeholder='Feet'
+                                            onChangeText={feet => this.setState({ feet })}
+                                            placeholderTextColor="#000000"
+                                            autoCorrect={false}
+                                            style={styles.textInput}
+                                        />
+                                    </View>
+                                    <View style={styles.action}>
+                                        <FontAwesome name="id-card" size={20} />
+                                        <TextInput
+                                            placeholder='Inches'
+                                            onChangeText={inches => this.setState({ inches })}
+                                            placeholderTextColor="#000000"
+                                            autoCorrect={false}
+                                            style={styles.textInput}
+                                        />
+                                    </View>
+                                    <View style={styles.action}>
+                                        <FontAwesome name="balance-scale" size={20} />
+                                        <TextInput
+                                            placeholder='Weight'
+                                            onChangeText={weight => this.setState({ weight })}
+                                            placeholderTextColor="#000000"
+                                            autoCorrect={false}
+                                            style={styles.textInput}
+                                        />
+                                    </View>
+                                    <View style={styles.action}>
+                                        <FontAwesome name="id-card" size={20} />
+                                        <Text style = {styles.textInput}>
+                                                Purpose
+                                            </Text>
+                                        <RNPickerSelect
+                                            placeholder = {{label:'Donate or Recieve weight?', value: ''}}
+                                            items = {[{label: 'Donate', value: 'donate'}, {label: 'Receive', value: 'receive'}]}
+                                            onValueChange={purpose => this.setState({ purpose })}
+                                            returnKeyType = 'done'
+                                        />
+                                    </View>
+                                    <View style={styles.action}>
+                                        <FontAwesome name="info" size={20} />
+                                        <TextInput
+                                            placeholder='Hobbies'
+                                            onChangeText={hobbies => this.setState({ hobbies })}
+                                            placeholderTextColor="#000000"
+                                            autoCorrect={false}
+                                            style={styles.textInput}
+                                        />
+                                    </View>
+                                    <TouchableOpacity style={styles.RegisterButton} onPress={() => this.validateUserData()}>
+                                        <Text style={styles.RegisterButtonTitle}>Register</Text>
+                                    </TouchableOpacity>
                                 </View>
-
-                                    
-                                <Text style={styles.textRegularHeading}>Weight</Text>
-                                <View style={styles.AuthTextInputRow}>
-                                    <AuthTextInput
-                                        style={styles.AuthTextInputContainerSmall}
-                                        onChangeText={weight => this.setState({ weight })}>
-                                        Pounds</AuthTextInput>
-                                </View>
-
-
-                                <Text style={styles.textRegularHeading}>Tell us about your hobbies. What are you passionate about?</Text>
-                                <View style={styles.AuthTextInputRow}>
-                                    <AuthTextInput
-                                        style={styles.AuthTextInputContainer}
-                                        onChangeText={hobbies => this.setState({ hobbies })}>
-                                        Hobbies</AuthTextInput>
-                                </View>
-
-                                <TouchableOpacity onPress={() => this.validateNumbers()}>
-                                    <Text style={{
-                                        color: '#FFF',
-                                        fontSize: 16,
-                                        fontFamily: 'Montserrat-SemiBold',
-                                        marginLeft: '40%',
-                                        marginTop: '32%'
-                                    }}>Continue</Text>
-                                </TouchableOpacity>
                             </View>
                         </KeyboardAwareScrollView>
                     </SafeAreaView>
@@ -227,4 +308,3 @@ export default class CreateProfile extends Component {
         )
     }
 }
-
