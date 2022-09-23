@@ -36,8 +36,6 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
     },
     background: {
         position: 'absolute',
@@ -63,6 +61,12 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         marginRight: 37
     },
+    textInput: {
+        flex: 1,
+        marginTop: Platform.OS === 'ios' ? 0 : -12,
+        paddingLeft: 10,
+        color: '#000000',
+      },
     textBold: {
         color: '#FFF',
         fontFamily: 'NunitoSans-Bold',
@@ -82,19 +86,38 @@ const styles = StyleSheet.create({
         marginBottom: '1%'
     },
     RegisterButton: {
+        padding: 15,
+        borderRadius: 10,
+        backgroundColor: '#0000FF',
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    RegisterButtonTitle:{
+        fontSize: 17,
+        fontWeight: 'bold',
+        color: 'white',
+    },
+    CreateAccountButton: {
         color: '#FFF',
         fontSize: 16,
         fontFamily: 'Montserrat-SemiBold',
-        marginLeft: '35%',
-        marginTop: '25%'
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: '7%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     LoginButton: {
         color: '#FFF',
-        fontSize: 16,
+        fontSize: 14,
         fontFamily: 'Montserrat-SemiBold',
-        marginTop: '53%',
-        marginLeft: '45%'
-        
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: '5%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     ios: {
         height: '100%', 
@@ -157,7 +180,15 @@ const styles = StyleSheet.create({
         width: '30px',
         height: '30px',
         paddingTop: '10%'
-    }
+    },
+    action: {
+        flexDirection: 'row',
+        marginTop: 10,
+        marginBottom: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#f2f2f2',
+        paddingBottom: 5,
+      },
 })
 
 export default styles;
