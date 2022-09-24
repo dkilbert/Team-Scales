@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Image, Text, TouchableOpacity, Platform, Alert } from 'react-native'
+import { View, Image, Text, TouchableOpacity, Platform, Alert, Button } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient';
 import colors from '../../assets/colors/colors';
 import styles from '../../assets/styles/styles';
@@ -80,9 +80,14 @@ export default class Login extends Component {
                                         <Text style={styles.textBold}>Create Account</Text>
                                     </TouchableOpacity>
                                 </View>
-                                    <TouchableOpacity  onPress={() => this.onSignIn()}>
-                                        <Text style={styles.LoginButton}>Login</Text>
-                                    </TouchableOpacity>
+                                <View style={styles.LoginButton}>
+                                <Text style={styles.LoginButton}></Text>
+                                    <Button 
+                                        color={colors.darkBlue}
+                                        title = 'Login' 
+                                        onPress={() => this.onSignIn()}>
+                                    </Button>
+                                </View>
                             </KeyboardAwareScrollView>
                         </SafeAreaView>
                     </LinearGradient>
