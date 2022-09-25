@@ -224,7 +224,7 @@ export default function Profile({ navigation }) {
                 </View>
 
 
-                <View style={{ flexDirection: 'row', justifyContent: 'center'}}>
+                <View style={{ flexDirection: 'row', justifyContent: 'center', justifyContent: 'space-evenly'}}>
                 <Button
                     style = {profileStyles.profileButton}
                     title = 'Save changes'
