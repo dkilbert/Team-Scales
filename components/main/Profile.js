@@ -15,8 +15,8 @@ export default function Profile({ navigation }) {
     const usersDB = fire.firestore().collection('users')
     const userID = fire.auth().currentUser.uid
 
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
+    const [firstName, setFirstName] = useState(" ");
+    const [lastName, setLastName] = useState(" ");
     const [sex, setSex] = useState("");
     const [age, setAge] = useState("");
     const [weight, setWeight] = useState("");
@@ -150,7 +150,7 @@ export default function Profile({ navigation }) {
                     </View>
                 </Pressable>
                 <View style = {profileStyles.profileRow}>
-                <Text style = {profileStyles.profileData}>Name  </Text><TextInput 
+                <Text style = {profileStyles.profileData}>Name:  </Text><TextInput 
                     style = {profileStyles.profileInput}
                     placeholder = {firstName.toString() + " "}
                     returnKeyType = 'done'
@@ -166,7 +166,7 @@ export default function Profile({ navigation }) {
 
 
                 <View style = {profileStyles.profileRow}>
-                <Text style = {profileStyles.profileData}>Age  </Text><TextInput 
+                <Text style = {profileStyles.profileData}>Age:  </Text><TextInput 
                     style = {profileStyles.profileInput}
                     placeholder = { age.toString() }
                     returnKeyType = 'done'
@@ -176,7 +176,7 @@ export default function Profile({ navigation }) {
 
 
                 <View style = {profileStyles.profileRow}>
-                <Text style = {profileStyles.profileData}>Height  </Text><TextInput 
+                <Text style = {profileStyles.profileData}>Height:  </Text><TextInput 
                     style = {profileStyles.heightInput}
                     placeholder = { feet.toString() }
                     returnKeyType = 'done'
@@ -194,7 +194,7 @@ export default function Profile({ navigation }) {
 
 
                 <View style = {profileStyles.profileRow}>
-                <Text style = {profileStyles.profileData}>Weight  </Text><TextInput 
+                <Text style = {profileStyles.profileData}>Weight:  </Text><TextInput 
                     style = {profileStyles.weightInput}
                     placeholder = { weight.toString() }
                     returnKeyType = 'done'
@@ -205,7 +205,7 @@ export default function Profile({ navigation }) {
 
 
                 <View style = {profileStyles.profileRow}>
-                <Text style = {profileStyles.profileData}>BMI </Text><Text style = {profileStyles.profileInput}>{bmi.toString()}</Text>
+                <Text style = {profileStyles.profileData}>BMI: </Text><Text style = {profileStyles.profileInput}>{bmi.toString()}</Text>
                 <Text>{`\n\n`}</Text>
                 </View>
 
@@ -215,7 +215,7 @@ export default function Profile({ navigation }) {
                 </View>
 
                 <View style = {profileStyles.profileRow}>
-                <Text style = {profileStyles.profileData}>Hobbies  </Text><TextInput 
+                <Text style = {profileStyles.profileData}>Hobbies:  </Text><TextInput 
                     style = {profileStyles.profileInput}
                     placeholder = { hobbies.toString() }
                     returnKeyType = 'done'
