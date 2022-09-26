@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Image, Text, TouchableOpacity, Platform } from 'react-native'
+import { View, Image, Text, TouchableOpacity, Platform, Button } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient';
 import colors from '../../assets/colors/colors';
 import styles from '../../assets/styles/styles';
@@ -81,15 +81,21 @@ export default class Register extends Component {
                                     style={styles.AuthTextInputContainer}
                                     onChangeText={confirmPassword => this.setState({ confirmPassword })}>
                                 Confirm Password</AuthTextInput>
+
                             <View style={styles.footerText}>
                                 <Text style={styles.textRegular}>Already Registered? </Text>
                                 <TouchableOpacity onPress={() => navigation.navigate("Login")}>
                                     <Text style={styles.textBold}>Login</Text>
                                 </TouchableOpacity>
                             </View>
-                                <TouchableOpacity onPress={() => this.validatePassword(navigation)}>
-                                    <Text style={styles.RegisterButton}>Create Account</Text>
-                                </TouchableOpacity>
+                            <View style={styles.CreateAccountButton}>
+                            <Text style={styles.CreateAccountButton}></Text>
+                                <Button
+                                    color={colors.darkBlue}
+                                    title = 'Create Account' 
+                                    onPress={() => this.validatePassword(navigation)}>
+                                </Button>
+                            </View>
                         </KeyboardAwareScrollView>
                     </SafeAreaView>
                 </LinearGradient>

@@ -22,7 +22,6 @@ import LoginScreen from './components/auth/Login'
 import MainScreen from './components/Main';
 import AddScreen from './components/main/Add';
 import SaveScreen from './components/main/Save'
-import ChoosePurposeScreen from './components/auth/ChoosePurpose'
 import BarcodeScreen from './components/BarcodeScreen'
 
 import * as Font from 'expo-font'
@@ -110,7 +109,6 @@ export default class App extends Component {
         <Stack.Screen name="CreateProfile" component={CreateProfileScreen} navigation={this.props.navigation} options={{  headerShown: false, animationEnabled: false }}/>
         <Stack.Screen name="AddContainer" component={AddScreen} navigation={this.props.navigation} options={{ headerShown: false, animationEnabled: false }}/>
         <Stack.Screen name="Save" component={SaveScreen} navigation={this.props.navigation} options={{ headerBackTitle: "Back", animationEnabled: false }}/>
-        <Stack.Screen name="ChoosePurpose" component={ChoosePurposeScreen} navigation={this.props.navigation} options={{  headerShown: false, animationEnabled: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
     )
