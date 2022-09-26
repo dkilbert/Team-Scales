@@ -99,23 +99,24 @@ const styles = StyleSheet.create({
     },
     CreateAccountButton: {
         color: '#FFF',
-        fontSize: 16,
+        fontSize: 25,
         fontFamily: 'Montserrat-SemiBold',
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: '7%',
+        marginTop: '2%',
         alignItems: 'center',
         justifyContent: 'center',
     },
     LoginButton: {
         color: '#FFF',
-        fontSize: 14,
+        fontSize: 32,
         fontFamily: 'Montserrat-SemiBold',
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: '5%',
+        marginTop: '2%',
+        margin: 10,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -188,6 +189,20 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#f2f2f2',
         paddingBottom: 5,
+      },
+      appButtonContainer:{
+        elevation: 8,
+        backgroundColor: "#009688",
+        borderRadius: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 12
+      },
+      appButtonText: {
+        fontSize: 20,
+        color: "#fff",
+        fontWeight: "bold",
+        alignSelf: "center",
+        textTransform: "uppercase"
       },
 })
 
