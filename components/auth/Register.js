@@ -73,22 +73,24 @@ export default class Register extends Component {
                                 Email</AuthTextInput>
                                 <AuthTextInput 
                                     secureTextEntry={true}
+                                    placeholder="password must be at least six characters"
                                     style={styles.AuthTextInputContainer}
                                     onChangeText={password => this.setState({ password })}>
                                 Password</AuthTextInput>
                                 <AuthTextInput 
                                     secureTextEntry={true}
+                                    placeholder="must match password above"
                                     style={styles.AuthTextInputContainer}
                                     onChangeText={confirmPassword => this.setState({ confirmPassword })}>
                                 Confirm Password</AuthTextInput>
 
                             <View style={styles.footerText}>
                                 <Text style={styles.textRegular}>Already Registered? </Text>
-                                <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-                                    <Text style={styles.textBold}>Login</Text>
+                                <TouchableOpacity style={styles.appButtonContainer} onPress={() => navigation.navigate("Login")}>
+                                    <Text style={styles.appButtonText}>Login</Text>
                                 </TouchableOpacity>
                             </View>
-                            <View style={styles.CreateAccountButton}>
+                            <View >
                             <Text style={styles.CreateAccountButton}></Text>
                                 <Button
                                     color={colors.darkBlue}
