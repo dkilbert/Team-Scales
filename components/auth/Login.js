@@ -71,16 +71,17 @@ export default class Login extends Component {
                                     Email</AuthTextInput>
                                     <AuthTextInput 
                                         secureTextEntry={true}
+                                        placeholder="must be at least six characters long"
                                         style={styles.AuthTextInputContainer}
                                         onChangeText={password => this.setState({ password })}>
                                     Password</AuthTextInput>
                                 <View style={styles.footerText}>
                                     <Text style={styles.textRegular}>Not Registered? </Text>
-                                    <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-                                        <Text style={styles.textBold}>Create Account</Text>
+                                    <TouchableOpacity style={styles.appButtonContainer} onPress={() => navigation.navigate("Register")}>
+                                        <Text style={styles.appButtonText}>Create Account</Text>
                                     </TouchableOpacity>
                                 </View>
-                                <View style={styles.LoginButton}>
+                                <View >
                                 <Text style={styles.LoginButton}></Text>
                                     <Button 
                                         color={colors.darkBlue}
