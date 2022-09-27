@@ -1,22 +1,23 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import fire from '../fire'
 import { Text, View, Button, TextInput, Image, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient';
 import colors from '../../assets/colors/colors';
 import profileStyles from '../../assets/styles/profileStyles'
+import { ScrollView } from 'react-native-gesture-handler';
 
 // handleLogout() - signs the user out and navigates them back to the Register page
 const handleLogout = () => {
     fire.auth().signOut();
 }
 
-export default function Profile({ navigation }) {    
+export default function Profile({ navigation }) {
     const usersDB = fire.firestore().collection('users')
     const userID = fire.auth().currentUser.uid
 
-    const [firstName, setFirstName] = useState(" ");
-    const [lastName, setLastName] = useState(" ");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [sex, setSex] = useState("");
     const [age, setAge] = useState("");
     const [weight, setWeight] = useState("");
@@ -44,7 +45,7 @@ export default function Profile({ navigation }) {
             let isError = false;
 
             //Check if name is empty
-            if (newFirstName == '' || newLastName =='') {
+            if (newFirstName == '' || newLastName == '') {
                 errorMsg += '\nName';
                 isError = true;
             }
@@ -64,17 +65,17 @@ export default function Profile({ navigation }) {
                 isError = true;
             }
 
-              //Check if weight is valid
-              if (newWeight == '' || isNaN(newWeight) || newWeight < 0 || newWeight > 1500) {
-                  errorMsg += '\nWeight';
-                  isError = true;
-              }
+            //Check if weight is valid
+            if (newWeight == '' || isNaN(newWeight) || newWeight < 0 || newWeight > 1500) {
+                errorMsg += '\nWeight';
+                isError = true;
+            }
 
-      //Check if hobbies section is empty
-      if (newHobbies == '') {
-          errorMsg += '\nHobbies';
-          isError = true;
-      }
+            //Check if hobbies section is empty
+            if (newHobbies == '') {
+                errorMsg += '\nHobbies';
+                isError = true;
+            }
 
             //If an error was detected.
             if (isError == true) {
@@ -99,7 +100,7 @@ export default function Profile({ navigation }) {
             weight: newWeight,
             hobbies: newHobbies,
             bmi: calcBMI()
-            })
+        })
 
         setUserDataIsRetrieved(false);
     }
@@ -137,108 +138,118 @@ export default function Profile({ navigation }) {
 
     return (
         <LinearGradient colors={[colors.lightBlue, colors.darkBlue]} style={profileStyles.outerScreen}>
-        <SafeAreaView style = {profileStyles.contentCenter}>
-            <View style = {profileStyles.innerScreen}>
+            <ScrollView showsVerticalScrollIndicator = {false}>
+                <SafeAreaView style={profileStyles.contentCenter}>
+                    <View style={profileStyles.innerScreen}>
 
-                <View style={{ alignItems: 'center'}}>
-                    <Text style = {profileStyles.pageHeader}>Profile</Text>
-                    <Image source={{ uri: profilePic }} style={profileStyles.profilePicture}/>
-                </View>
-                <Pressable onPress={() => {  navigation.navigate('AddContainer')   }}>
-                    <View style = {{flexDirection: 'row',justifyContent: 'center', marginLeft: 50, marginBottom: 30}}>
-                        <Text style = {profileStyles.profilePicAdd}>{"Update Profile Picture"} </Text>
+                        <View style={{ alignItems: 'center' }}>
+                            <Text style={profileStyles.pageHeader}>Profile</Text>
+                            <Image source={{ uri: profilePic }} style={profileStyles.profilePicture} />
+                        </View>
+                        <Pressable onPress={() => { navigation.navigate('AddContainer') }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                                <Text style={profileStyles.profilePicAdd}>{"Update Profile Picture"} </Text>
+                            </View>
+                        </Pressable>
+                        <View style={profileStyles.profileRow}>
+                            <Text style={profileStyles.profileData}>First Name</Text><TextInput
+                                style={profileStyles.profileInput}
+                                placeholder={firstName.toString() + "   "}
+                                returnKeyType='done'
+                                onChangeText={editedFirstName => newFirstName = editedFirstName}
+                            />
+                            {/* <TextInput
+                                style={profileStyles.profileInput}
+                                placeholder={lastName.toString()}
+                                returnKeyType='done'
+                                onChangeText={editedLastName => newLastName = editedLastName}
+                            /> */}
+                        </View>
+
+                        <View style={profileStyles.profileRow}>
+                            <Text style={profileStyles.profileData}>Last Name</Text><TextInput
+                                style={profileStyles.profileInput}
+                                placeholder={lastName.toString()}
+                                returnKeyType='done'
+                                onChangeText={editedLastName => newLastName = editedLastName}
+                            />
+                        </View>
+
+
+                        <View style={profileStyles.profileRow}>
+                            <Text style={profileStyles.profileData}>Age</Text><TextInput
+                                style={profileStyles.profileInput}
+                                placeholder={age.toString()}
+                                returnKeyType='done'
+                                onChangeText={editedAge => newAge = editedAge}
+                            />
+                        </View>
+
+
+                        <View style={profileStyles.profileRow}>
+                            <Text style={profileStyles.profileData}>Height</Text><TextInput
+                                style={profileStyles.heightInput}
+                                placeholder={feet.toString()}
+                                returnKeyType='done'
+                                onChangeText={editedFeet => newFeet = editedFeet}
+                            />
+                            <Text style={{ fontSize: 17, fontFamily: 'Montserrat-SemiBold', color: "#000000", }}>'</Text>
+                            <TextInput
+                                style={profileStyles.heightInput}
+                                placeholder={inches.toString()}
+                                returnKeyType='done'
+                                onChangeText={editedInches => newInches = editedInches}
+                            />
+                            <Text style={{ fontSize: 17, fontFamily: 'Montserrat-SemiBold', color: "#000000", }}>"</Text>
+                        </View>
+
+
+                        <View style={profileStyles.profileRow}>
+                            <Text style={profileStyles.profileData}>Weight</Text><TextInput
+                                style={profileStyles.weightInput}
+                                placeholder={weight.toString()}
+                                returnKeyType='done'
+                                onChangeText={editedWeight => newWeight = editedWeight}
+                            />
+                            <Text style = {{fontSize: 25, fontFamily: 'NunitoSans-Regular'}}> lbs</Text>
+                        </View>
+
+
+                        <View style={profileStyles.profileRow}>
+                            <Text style={profileStyles.profileData}>BMI<span style={{fontSize: 20, marginLeft: 10}}>{bmi.toString()}</span></Text>
+                        </View>
+
+                        <View style={profileStyles.profileRow}>
+                            <Text style={profileStyles.profileData}>Hobbies</Text><TextInput
+                                style={profileStyles.profileInput}
+                                placeholder={hobbies.toString()}
+                                returnKeyType='done'
+                                onChangeText={editedHobbies => newHobbies = editedHobbies}
+                            />
+                        </View>
+
+                        <View style={profileStyles.profileRow}>
+                            <Text style={profileStyles.profileData}>{"I want to " + purpose.toString() + " weight!"} </Text>
+                        </View>
+
+
+                        <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: '5%' }}>
+                            <Button
+                                title='Save changes'
+                                onPress={() => validateProfileEdits()}
+                            />
+                        </View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: '2%' }}>
+
+                            <Button
+                                onPress={handleLogout}
+                                title='Logout'
+                            />
+                        </View>
                     </View>
-                </Pressable>
-                <View style = {profileStyles.profileRow}>
-                <Text style = {profileStyles.profileData}>Name:  </Text><TextInput 
-                    style = {profileStyles.profileInput}
-                    placeholder = {firstName.toString() + " "}
-                    returnKeyType = 'done'
-                    onChangeText = {editedFirstName => newFirstName = editedFirstName}
-                />
-                <TextInput 
-                    style = {profileStyles.profileInput}
-                    placeholder = {lastName.toString()}
-                    returnKeyType = 'done'
-                    onChangeText = {editedLastName => newLastName = editedLastName}
-                />
-                </View>
-
-
-                <View style = {profileStyles.profileRow}>
-                <Text style = {profileStyles.profileData}>Age:  </Text><TextInput 
-                    style = {profileStyles.profileInput}
-                    placeholder = { age.toString() }
-                    returnKeyType = 'done'
-                    onChangeText = {editedAge => newAge = editedAge}
-                />
-                </View>
-
-
-                <View style = {profileStyles.profileRow}>
-                <Text style = {profileStyles.profileData}>Height:  </Text><TextInput 
-                    style = {profileStyles.heightInput}
-                    placeholder = { feet.toString() }
-                    returnKeyType = 'done'
-                    onChangeText = {editedFeet => newFeet = editedFeet}
-                />
-                <Text style = {{fontSize: 17, fontFamily: 'Montserrat-SemiBold', color: "#000000",}}>'  </Text>
-                <TextInput 
-                    style = {profileStyles.heightInput}
-                    placeholder = { inches.toString() }
-                    returnKeyType = 'done'
-                    onChangeText = {editedInches => newInches = editedInches}
-                />
-                <Text style = {{fontSize: 17, fontFamily: 'Montserrat-SemiBold', color: "#000000",}}>"</Text>
-                </View>
-
-
-                <View style = {profileStyles.profileRow}>
-                <Text style = {profileStyles.profileData}>Weight:  </Text><TextInput 
-                    style = {profileStyles.weightInput}
-                    placeholder = { weight.toString() }
-                    returnKeyType = 'done'
-                    onChangeText = {editedWeight => newWeight = editedWeight}
-                />
-                <Text style = {profileStyles.profileInput}> lbs</Text>
-                </View>
-
-
-                <View style = {profileStyles.profileRow}>
-                <Text style = {profileStyles.profileData}>BMI: </Text><Text style = {profileStyles.profileInput}>{bmi.toString()}</Text>
-                <Text>{`\n\n`}</Text>
-                </View>
-
-
-                <View style = {{flexDirection: 'row', marginLeft: 50, marginBottom: 25}}>
-                <Text style = {profileStyles.profileData}>{"I want to " + purpose.toString() + " weight!"} </Text>
-                </View>
-
-                <View style = {profileStyles.profileRow}>
-                <Text style = {profileStyles.profileData}>Hobbies:  </Text><TextInput 
-                    style = {profileStyles.profileInput}
-                    placeholder = { hobbies.toString() }
-                    returnKeyType = 'done'
-                    onChangeText = {editedHobbies => newHobbies = editedHobbies}
-                />
-                </View>
-
-
-                <View style={{ flexDirection: 'row', justifyContent: 'center', justifyContent: 'space-evenly'}}>
-                <Button
-                    style = {profileStyles.profileButton}
-                    title = 'Save changes'
-                    onPress = {() => validateProfileEdits()}
-                />
-                <Button
-                    style = {profileStyles.profileButton}
-                    onPress = {handleLogout}
-                    title = 'Logout'
-                />
-                </View>
-            </View>
-        </SafeAreaView>
+                </SafeAreaView>
+            </ScrollView>
         </LinearGradient>
     );
-}   
+}
 

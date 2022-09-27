@@ -26,7 +26,8 @@ const profileStyles = StyleSheet.create({
         left: 0,
         right: 0,
         top: 0,
-        height: '100%'
+        height: '100%',
+        //backgroundColor: '#000000'
     },
     pageHeader:
     {
@@ -39,14 +40,14 @@ const profileStyles = StyleSheet.create({
     {
         marginLeft: 10,
         marginTop: '4%',
-        marginBottom: '20%',
+        marginBottom: '10%',
         width: 200,
         height: 200,
         borderRadius: 100,
     },
     profileData:
     {
-        fontSize: 17,
+        fontSize: 25,
         fontFamily: 'Montserrat-SemiBold',
         color: "#000000",
         marginLeft: '10%',
@@ -54,39 +55,42 @@ const profileStyles = StyleSheet.create({
     },
     profilePicAdd:
     {
-        fontSize: 15,
+        fontSize: 25,
         fontFamily: 'Montserrat-SemiBold',
         color: "#5580AA",
-        marginBottom: 7,
+        marginBottom: '10%',
         alignItems: 'center'
     },
     profileInput:
     {
-        fontSize: 20,
+        fontSize: 22,
         fontFamily: 'NunitoSans-Regular',
-        marginRight: 0
+        //marginRight: 10,
+        marginLeft: 10,
     },
     profileRow:
     {
         flexDirection: 'row',
-        marginLeft: 10,
+        marginLeft: 20,
     },
     heightInput:
     {
         fontSize: 20,
         fontFamily: 'NunitoSans-Regular',
-        width: 25
+        width: 25,
+        marginLeft: 10,
     },
     weightInput:
     {
         fontSize: 20,
         fontFamily: 'NunitoSans-Regular',
-        width: 40
+        width: 40,
+        marginLeft: 10,
     },
-    profileButton: {
-        height: 10,
-        width: 10
-    }
+    // profileButton: {
+        
+
+    // }
 })
 
 
