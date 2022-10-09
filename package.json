@@ -9,6 +9,10 @@
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.2.0",
+    "@fortawesome/fontawesome-free": "^6.2.0",
+    "@fortawesome/fontawesome-svg-core": "^6.2.0",
+    "@fortawesome/free-solid-svg-icons": "^6.2.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@react-firebase/database": "^0.2.10",
     "@react-native-community/masked-view": "0.1.10",
     "@react-native-picker/picker": "1.16.1",
