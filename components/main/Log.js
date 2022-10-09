@@ -1,10 +1,12 @@
 import React, {useState} from 'react'
 import { StatusBar } from 'expo-status-bar'
 import fire from '../fire'
-import { Text, View, Button, TextInput, Image, FlatList } from 'react-native'
+import { Text, View, Button, TextInput } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
 import colors from '../../assets/colors/colors'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {faAppleAlt, faBacon, faBurger, faCalendarDay, faDrumstickBite, faFish, faHourglassHalf, faListCheck, faLocationDot, faStar, faUtensils, faWeightScale } from '@fortawesome/free-solid-svg-icons'
 
 export default function Log() {
 
@@ -116,7 +118,7 @@ export default function Log() {
 
         // Call updateLog to add this food entered to firebase
         updateLog();
-        alert("You added: " + name);
+        alert("You added: " + name + "\nCalories: " + calories);
 
         // Update the state of the component to clear input boxes and show latest food
         setFood('');
@@ -181,45 +183,37 @@ export default function Log() {
     
 
     return (
-        <LinearGradient colors={[colors.lightBlue, colors.darkBlue]} style={styles.outerScreen}>
         <SafeAreaView style = {styles.contentCenter}>
             <StatusBar barStyle='light-content' />
-            <Text style = {styles.pageHeader}>Log</Text>
+            <Text style = {styles.pageHeader}> 
+            <FontAwesomeIcon icon={faListCheck} size='20'/>Log</Text>
             <View style = {styles.logScreen}>
+            <LinearGradient colors={[colors.lightBlue, colors.darkBlue]} style={styles.outerScreen}>
                 <View style = {{ alignItems: 'center' }}>
-
                     <View style = {styles.logRow}>
-                        <Text style = {styles.logData}>Date: {logDate.toString()}</Text>
+                        <Text style = {styles.logData}> <FontAwesomeIcon icon={faCalendarDay} size='20'/> : {logDate.toString()}</Text>
                     </View>
 
                     <View style = {styles.logPurpose}>
-                        <Text style = {styles.logData}>Your purpose is to {purpose} weight! </Text>
+                        <Text style = {styles.foodName}>Your purpose is to {purpose} weight! </Text>
                     </View>
-
+                    <Text style = {styles.foodName}> <FontAwesomeIcon icon={faUtensils} size='20'/> Calories</Text>
                     <View style = {{flex: 1, flexDirection:"row", justifyContent:'center', alignItems: 'center', width: '100%', height: '10%',
                                     borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomRightRadius: 20,
-                                    borderBottomLeftRadius: 20, backgroundColor: "#FFFFFF", padding: 10, marginBottom: 30}}>
-                        <Text style = {styles.logData}>Daily Calories to maintain weight: {Math.round(recommendedCalories)} Cal</Text>
+                                    borderBottomLeftRadius: 20, backgroundColor: "#FFFFFF", borderBottomWidth: 4, borderBottomColor: colors.darkBlue,
+                                    borderTopColor: colors.darkBlue, borderTopWidth: 4, padding: 10, marginBottom: 30}}>
+                        <Text style = {styles.logData}>   {Math.round(purposeCalories)} Cal        -          {Math.round(dailyCalories)} Cal        =         {Math.round(purposeCalories - dailyCalories)} Cal 
+                            {"\n"}   <FontAwesomeIcon icon={faStar} size='20'/> <span style={{fontWeight: 'bold'}}>Goal            </span>    <FontAwesomeIcon icon={faLocationDot} size='20'/> <span style={{fontWeight: 'bold'}}>Current        </span>    <FontAwesomeIcon icon={faHourglassHalf} size='20'/> <span style={{fontWeight: 'bold'}}>Remaining</span></Text>
                     </View> 
 
                     <View style = {{flex: 1, flexDirection:"row", justifyContent:'center', alignItems: 'center', width: '100%', height: '10%',
                                     borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomRightRadius: 20,
-                                    borderBottomLeftRadius: 20, backgroundColor: "#FFFFFF", padding: 10, marginBottom: 30}}>
-                        <Text style = {styles.logData}>Daily Calories to {purpose} 1 lb: {Math.round(purposeCalories)} Cal</Text>
-                    </View>
-
-                    <View style = {{flex: 1, flexDirection:"row", justifyContent:'center', alignItems: 'center', width: '100%', height: '10%',
-                                    borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomRightRadius: 20,
-                                    borderBottomLeftRadius: 20, backgroundColor: "#FFFFFF", padding: 10, marginBottom: 30}}>
-                        <Text style = {styles.logData}>Current Daily Calories: {dailyCalories} Cal</Text>
-                    </View>
-
-                    <View style = {{flex: 1, flexDirection:"row", justifyContent:'center', alignItems: 'center', width: '100%', height: '10%',
-                                    borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomRightRadius: 20,
-                                    borderBottomLeftRadius: 20, backgroundColor: "#FFFFFF", padding: 10, marginBottom: 30}}>
+                                    borderBottomLeftRadius: 20, backgroundColor: "#FFFFFF", borderBottomWidth: 4, borderBottomColor: colors.darkBlue,
+                                    borderTopColor: colors.darkBlue, borderTopWidth: 4, padding: 10, marginBottom: 20}}>
+                        <FontAwesomeIcon icon={faDrumstickBite} size='20'/>
                         <TextInput 
                             style = {styles.nameInput}
-                            placeholder = "Food"
+                            placeholder = " Food"
                             returnKeyType = 'done'
                             value={food}
                             onChangeText = {(text) => setFood(text)}
@@ -227,9 +221,10 @@ export default function Log() {
                                 setFood('');
                             }}
                         />
+                        <FontAwesomeIcon icon={faWeightScale} size='20'/>
                         <TextInput 
                             style = {styles.calorieInput}
-                            placeholder = "Calories"
+                            placeholder = " Calories"
                             returnKeyType = 'done'
                             value={calories}
                             onChangeText = {(text) => setCalories(text)}
@@ -238,32 +233,72 @@ export default function Log() {
                             }}
                         />
                     </View>
+
                     <View style={{ flexDirection: 'row', justifyContent: 'center'}}>
-                    <Button
+                    <FontAwesomeIcon icon={faBacon} size='20'/>
+                    <Text style = {styles.foodName}> Breakfast</Text>
+                    </View>
+                    <View style = {{flex: 1, flexDirection:"row", justifyContent:'center', alignItems: 'center', width: '50%', height: '10%',
+                                    borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomRightRadius: 20,
+                                    borderBottomLeftRadius: 20, backgroundColor: "#FFFFFF", borderBottomWidth: 4, borderBottomColor: colors.darkBlue,
+                                    borderTopColor: colors.darkBlue, borderTopWidth: 4, padding: 20, marginBottom: 15
+                                    }}>
+                        <Button
                             title = 'Add Food'
                             onPress = {() => validateFoodInputs(food, calories) && startIndex}
                         />
                     </View>
-                    <FlatList
-                        data={dailyFood}
-                        renderItem={({item}) => 
-                            <View style = {styles.foodData}>
-                                {item.createdAt === logDate &&
-                                    <View style={{ flex: 1, flexDirection: 'row'}}>
-                                    <Text style= {styles.foodName}>{item.name}{" "}</Text>
-                                    <Text style= {styles.foodCalories}>{item.calories}</Text>
-                                </View>
-                                }
-                            </View>}
-                        onEndReached = {() => continueList(startIndex, endIndex)}
-                        onEndReachedThreshold = {1}
-                        keyExtractor = {(item, index) => index.toString()}
+
+                    <View style={{ flexDirection: 'row', justifyContent: 'center'}}>
+                    <FontAwesomeIcon icon={faBurger} size='20'/>
+                    <Text style = {styles.foodName}> Lunch</Text>
+                    </View>
+                    <View style = {{flex: 1, flexDirection:"row", justifyContent:'center', alignItems: 'center', width: '50%', height: '10%',
+                                    borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomRightRadius: 20,
+                                    borderBottomLeftRadius: 20, backgroundColor: "#FFFFFF", borderBottomWidth: 4, borderBottomColor: colors.darkBlue,
+                                    borderTopColor: colors.darkBlue, borderTopWidth: 4, padding: 20, marginBottom: 15
+                                    }}>
+                        <Button
+                            title = 'Add Food'
+                            onPress = {() => validateFoodInputs(food, calories) && startIndex}
                         />
-                    
+                    </View>
+
+                    <View style={{ flexDirection: 'row', justifyContent: 'center'}}>
+                    <FontAwesomeIcon icon={faFish} size='20'/>
+                    <Text style = {styles.foodName}> Dinner</Text>
+                    </View>
+                    <View style = {{flex: 1, flexDirection:"row", justifyContent:'center', alignItems: 'center', width: '50%', height: '10%',
+                                    borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomRightRadius: 20,
+                                    borderBottomLeftRadius: 20, backgroundColor: "#FFFFFF", borderBottomWidth: 4, borderBottomColor: colors.darkBlue,
+                                    borderTopColor: colors.darkBlue, borderTopWidth: 4, padding: 20, marginBottom: 15
+                                    }}>
+                        <Button
+                            title = 'Add Food'
+                            onPress = {() => validateFoodInputs(food, calories) && startIndex}
+                        />
+                
+                    </View>
+
+                    <View style={{ flexDirection: 'row', justifyContent: 'center'}}>
+                    <FontAwesomeIcon icon={faAppleAlt} size='20'/>
+                    <Text style = {styles.foodName}> Snacks</Text>
+                    </View>
+                    <View style = {{flex: 1, flexDirection:"row", justifyContent:'center', alignItems: 'center', width: '50%', height: '10%',
+                                    borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomRightRadius: 20,
+                                    borderBottomLeftRadius: 20, backgroundColor: "#FFFFFF", borderBottomWidth: 4, borderBottomColor: colors.darkBlue,
+                                    borderTopColor: colors.darkBlue, borderTopWidth: 4, padding: 20, marginBottom: 15
+                                    }}>
+                        <Button
+                            title = 'Add Food'
+                            onPress = {() => validateFoodInputs(food, calories) && startIndex}
+                        />
+                
+                    </View>
                 </View>
+                </LinearGradient>
             </View>
         </SafeAreaView>
-        </LinearGradient>
     );
 }   
 
@@ -276,7 +311,7 @@ const styles = {
     logScreen: {
         height: '100%',
         width: '100%',
-        backgroundColor: '#D9D7D7',
+        backgroundColor: colors.lightBlue,
     },
     logData: {
         fontSize: 20,
@@ -284,7 +319,6 @@ const styles = {
     logPurpose: {
         flexDirection: 'row',
         width: '100%',
-        backgroundColor: '#D9D7D7',
         justifyContent: 'center',
         fontWeight: 'bold',
         padding: 10
@@ -292,14 +326,18 @@ const styles = {
     logRow: {
         flexDirection: 'row',
         width: '100%',
-        height: '10%',
+        height: '6%',
         backgroundColor: "#FFFFFF",
         justifyContent: 'center',
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20, 
         borderBottomRightRadius: 20,
         borderBottomLeftRadius: 20,
-        padding: 10,
+        borderBottomWidth: 4, 
+        borderBottomColor: colors.darkBlue,
+        borderTopColor: colors.darkBlue, 
+        borderTopWidth: 4,
+        padding: 5,
     },
     calorieInput: {
         fontSize: 20,
@@ -314,12 +352,15 @@ const styles = {
         left: 0,
         right: 0,
         top: 0,
-        height: '100%'       
+        height: '100%',
     },
     pageHeader: {
         fontSize: 30,
         fontFamily: 'NunitoSans-Bold',
         color: '#000000',
+        backgroundColor: colors.lightBlue,
+        width: '100%',
+        textAlign: 'center'
     },
     foodData: {
     },
