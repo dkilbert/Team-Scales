@@ -198,18 +198,18 @@ export default function Log() {
                         <Text style = {styles.foodName}>Your purpose is to {purpose} weight! </Text>
                     </View>
                     <Text style = {styles.foodName}> <FontAwesomeIcon icon={faUtensils} size='20'/> Calories</Text>
-                    <View style = {{flex: 1, flexDirection:"row", justifyContent:'center', alignItems: 'center', width: '100%', height: '10%',
+                    <View style = {{flex: 1, flexDirection:"row", justifyContent:'center', alignItems: 'center', width: '95%', height: '10%',
                                     borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomRightRadius: 20,
                                     borderBottomLeftRadius: 20, backgroundColor: "#FFFFFF", borderBottomWidth: 4, borderBottomColor: colors.darkBlue,
-                                    borderTopColor: colors.darkBlue, borderTopWidth: 4, padding: 10, marginBottom: 30}}>
-                        <Text style = {styles.logData}>   {Math.round(purposeCalories)} Cal        -          {Math.round(dailyCalories)} Cal        =         {Math.round(purposeCalories - dailyCalories)} Cal 
-                            {"\n"}   <FontAwesomeIcon icon={faStar} size='20'/> <span style={{fontWeight: 'bold'}}>Goal            </span>    <FontAwesomeIcon icon={faLocationDot} size='20'/> <span style={{fontWeight: 'bold'}}>Current        </span>    <FontAwesomeIcon icon={faHourglassHalf} size='20'/> <span style={{fontWeight: 'bold'}}>Remaining</span></Text>
+                                    borderTopColor: colors.darkBlue, borderTopWidth: 4, padding: 15, marginBottom: 20}}>
+                        <Text style = {styles.contentCenter}>   {Math.round(purposeCalories)} Cal        -          {Math.round(dailyCalories)} Cal        =         {Math.round(purposeCalories - dailyCalories)} Cal 
+                            {"\n"}   <FontAwesomeIcon icon={faStar} size='20'/> <span style={{fontWeight: 'bold'}}>Goal            </span>      <FontAwesomeIcon icon={faLocationDot} size='20'/> <span style={{fontWeight: 'bold'}}>Current        </span>       <FontAwesomeIcon icon={faHourglassHalf} size='20'/> <span style={{fontWeight: 'bold'}}>Remaining</span></Text>
                     </View> 
 
-                    <View style = {{flex: 1, flexDirection:"row", justifyContent:'center', alignItems: 'center', width: '100%', height: '10%',
+                    <View style = {{flex: 1, flexDirection:"row", justifyContent:'center', alignItems: 'center', width: '95%', height: '10%',
                                     borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomRightRadius: 20,
                                     borderBottomLeftRadius: 20, backgroundColor: "#FFFFFF", borderBottomWidth: 4, borderBottomColor: colors.darkBlue,
-                                    borderTopColor: colors.darkBlue, borderTopWidth: 4, padding: 10, marginBottom: 20}}>
+                                    borderTopColor: colors.darkBlue, borderTopWidth: 4, padding: 15, marginBottom: 15}}>
                         <FontAwesomeIcon icon={faDrumstickBite} size='20'/>
                         <TextInput 
                             style = {styles.nameInput}
@@ -241,7 +241,7 @@ export default function Log() {
                     <View style = {{flex: 1, flexDirection:"row", justifyContent:'center', alignItems: 'center', width: '50%', height: '10%',
                                     borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomRightRadius: 20,
                                     borderBottomLeftRadius: 20, backgroundColor: "#FFFFFF", borderBottomWidth: 4, borderBottomColor: colors.darkBlue,
-                                    borderTopColor: colors.darkBlue, borderTopWidth: 4, padding: 20, marginBottom: 15
+                                    borderTopColor: colors.darkBlue, borderTopWidth: 4, padding: 15, marginBottom: 15
                                     }}>
                         <Button
                             title = 'Add Food'
@@ -256,7 +256,7 @@ export default function Log() {
                     <View style = {{flex: 1, flexDirection:"row", justifyContent:'center', alignItems: 'center', width: '50%', height: '10%',
                                     borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomRightRadius: 20,
                                     borderBottomLeftRadius: 20, backgroundColor: "#FFFFFF", borderBottomWidth: 4, borderBottomColor: colors.darkBlue,
-                                    borderTopColor: colors.darkBlue, borderTopWidth: 4, padding: 20, marginBottom: 15
+                                    borderTopColor: colors.darkBlue, borderTopWidth: 4, padding: 15, marginBottom: 15
                                     }}>
                         <Button
                             title = 'Add Food'
@@ -271,7 +271,7 @@ export default function Log() {
                     <View style = {{flex: 1, flexDirection:"row", justifyContent:'center', alignItems: 'center', width: '50%', height: '10%',
                                     borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomRightRadius: 20,
                                     borderBottomLeftRadius: 20, backgroundColor: "#FFFFFF", borderBottomWidth: 4, borderBottomColor: colors.darkBlue,
-                                    borderTopColor: colors.darkBlue, borderTopWidth: 4, padding: 20, marginBottom: 15
+                                    borderTopColor: colors.darkBlue, borderTopWidth: 4, padding: 15, marginBottom: 15
                                     }}>
                         <Button
                             title = 'Add Food'
@@ -287,7 +287,7 @@ export default function Log() {
                     <View style = {{flex: 1, flexDirection:"row", justifyContent:'center', alignItems: 'center', width: '50%', height: '10%',
                                     borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomRightRadius: 20,
                                     borderBottomLeftRadius: 20, backgroundColor: "#FFFFFF", borderBottomWidth: 4, borderBottomColor: colors.darkBlue,
-                                    borderTopColor: colors.darkBlue, borderTopWidth: 4, padding: 20, marginBottom: 15
+                                    borderTopColor: colors.darkBlue, borderTopWidth: 4, padding: 15, marginBottom: 15
                                     }}>
                         <Button
                             title = 'Add Food'
@@ -305,7 +305,8 @@ export default function Log() {
 const styles = {
     contentCenter: {
         height: '100%',
-        alignItems: 'center'
+        alignItems: 'center',
+        fontFamily: 'NunitoSans-Bold',
         
     },
     logScreen: {
@@ -325,7 +326,7 @@ const styles = {
     },
     logRow: {
         flexDirection: 'row',
-        width: '100%',
+        width: '95%',
         height: '6%',
         backgroundColor: "#FFFFFF",
         justifyContent: 'center',
