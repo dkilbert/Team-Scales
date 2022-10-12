@@ -73,7 +73,7 @@ export default class Register extends Component {
                                 Email</AuthTextInput>
                                 <AuthTextInput 
                                     secureTextEntry={true}
-                                    placeholder="password must be at least six characters"
+                                    placeholder="must be at least six characters"
                                     style={styles.AuthTextInputContainer}
                                     onChangeText={password => this.setState({ password })}>
                                 Password</AuthTextInput>
