@@ -81,7 +81,7 @@ export default class Login extends Component {
                                         <Text style={styles.appButtonText}>Create Account</Text>
                                     </TouchableOpacity>
                                 </View>
-                                <View >
+                                <View style = {styles.LoginButton}>
                                 <Text style={styles.LoginButton}></Text>
                                     <Button 
                                         color={colors.darkBlue}

@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     },
     CreateAccountButton: {
         color: '#FFF',
-        fontSize: 25,
+        fontSize: 32,
         fontFamily: 'Montserrat-SemiBold',
         flex: 1,
         alignItems: 'center',

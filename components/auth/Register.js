@@ -90,7 +90,7 @@ export default class Register extends Component {
                                     <Text style={styles.appButtonText}>Login</Text>
                                 </TouchableOpacity>
                             </View>
-                            <View >
+                            <View style = {styles.CreateAccountButton}>
                             <Text style={styles.CreateAccountButton}></Text>
                                 <Button
                                     color={colors.darkBlue}
