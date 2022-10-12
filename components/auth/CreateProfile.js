@@ -13,6 +13,8 @@ import { ImageBackground } from 'react-native-web';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { TextInput } from 'react-native-gesture-handler';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBalanceScale, faBirthdayCake, faInfoCircle, faRulerVertical, faStar, faUser, faVenusMars } from '@fortawesome/free-solid-svg-icons'
 
 export default class CreateProfile extends Component {
 
@@ -203,7 +205,7 @@ export default class CreateProfile extends Component {
                                     </View>
 
                                     <View style={styles.action}>
-                                        <FontAwesome name="user" size={20} />
+                                        <FontAwesomeIcon icon={faUser} size='20'/>
                                         <TextInput
                                             placeholder='First Name'
                                             onChangeText={first_name => this.setState({ first_name })}
@@ -213,9 +215,9 @@ export default class CreateProfile extends Component {
                                         />
                                     </View>
                                     <View style={styles.action}>
-                                        <FontAwesome name="user" size={20} />
+                                        <FontAwesomeIcon icon={faUser} size='20'/>
                                         <TextInput
-                                            placeholder='Last'
+                                            placeholder='Last Name'
                                             onChangeText={last_name => this.setState({ last_name })}
                                             placeholderTextColor="#000000"
                                             autoCorrect={false}
@@ -223,7 +225,7 @@ export default class CreateProfile extends Component {
                                         />
                                     </View>
                                     <View style={styles.action}>
-                                        <FontAwesome name="venus-mars" size={20} />
+                                        <FontAwesomeIcon icon={faVenusMars} size='20'/>
                                         <Text style = {styles.textInput}>
                                                 Sex
                                             </Text>
@@ -234,7 +236,7 @@ export default class CreateProfile extends Component {
                                         />
                                     </View>
                                     <View style={styles.action}>
-                                        <FontAwesome name="birthday-cake" size={20} />
+                                        <FontAwesomeIcon icon={faBirthdayCake} size='20'/>
                                         <TextInput
                                             placeholder='Age'
                                             onChangeText={age => this.setState({ age })}
@@ -244,7 +246,7 @@ export default class CreateProfile extends Component {
                                         />
                                     </View>
                                     <View style={styles.action}>
-                                        <FontAwesome name="id-card" size={20} />
+                                        <FontAwesomeIcon icon={faRulerVertical} size='20'/>
                                         <TextInput
                                             placeholder='Feet'
                                             onChangeText={feet => this.setState({ feet })}
@@ -254,7 +256,7 @@ export default class CreateProfile extends Component {
                                         />
                                     </View>
                                     <View style={styles.action}>
-                                        <FontAwesome name="id-card" size={20} />
+                                        <FontAwesomeIcon icon={faRulerVertical} size='20'/>
                                         <TextInput
                                             placeholder='Inches'
                                             onChangeText={inches => this.setState({ inches })}
@@ -264,7 +266,7 @@ export default class CreateProfile extends Component {
                                         />
                                     </View>
                                     <View style={styles.action}>
-                                        <FontAwesome name="balance-scale" size={20} />
+                                        <FontAwesomeIcon icon={faBalanceScale} size='20'/>
                                         <TextInput
                                             placeholder='Weight'
                                             onChangeText={weight => this.setState({ weight })}
@@ -274,7 +276,7 @@ export default class CreateProfile extends Component {
                                         />
                                     </View>
                                     <View style={styles.action}>
-                                        <FontAwesome name="id-card" size={20} />
+                                        <FontAwesomeIcon icon={faStar} size='20'/>
                                         <Text style = {styles.textInput}>
                                                 Purpose
                                             </Text>
@@ -286,7 +288,7 @@ export default class CreateProfile extends Component {
                                         />
                                     </View>
                                     <View style={styles.action}>
-                                        <FontAwesome name="info" size={20} />
+                                        <FontAwesomeIcon icon={faInfoCircle} size='20'/>
                                         <TextInput
                                             placeholder='Hobbies'
                                             onChangeText={hobbies => this.setState({ hobbies })}
