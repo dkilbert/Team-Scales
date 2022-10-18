@@ -7,6 +7,7 @@ import colors from '../../assets/colors/colors'
 import fire from '../fire'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import LineChart from './LineChart'
+import './App.css';
 
 function Progress() {
     const usersDB = fire.firestore().collection('users')
@@ -152,9 +153,51 @@ function Progress() {
                         </View>
                     </View>
                 </Modal>
+                <div>
+        <head>
+        </head>
+      <h1>Calories Intake</h1>
+      <table class = 'table-dark' >
+        <thead>
+        <tr>
+          <th>Food</th>
+          <th>Calories </th>
+          <th>Total Calories </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Apple</td>
+            <td>23</td>
+            <td>23</td>
+            
+          </tr>
+          <tr>
+            <td>Burger</td>
+            <td>24</td>
+            <td>47</td>
+          </tr>
+          <tr>
+            <td>Juice</td>
+            <td>29</td>
+            <td>76</td>
+          </tr>
+          <tr>
+            <td>Salad</td>
+            <td>26</td>
+            <td>102</td>
+          </tr>
+          <tr>
+            <td>Pizza</td>
+            <td>270</td>
+            <td>372</td>
+          </tr>
+          </tbody>
+      </table>
+    </div>
                 <View style={styles.logWeightSection}>
                 </View>
-            </View>
+            </View>            
         </SafeAreaView>
         </LinearGradient>
     )
