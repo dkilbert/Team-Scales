@@ -170,8 +170,11 @@ export default function Log() {
         if (purpose == "donate") {
             setPurposeCalories(calories - 500);
         }
-        else {
+        if (purpose == "recieve"){
             setPurposeCalories(calories + 500);
+        }
+        else {
+            setPurposeCalories(calories);
         }   
     }
 

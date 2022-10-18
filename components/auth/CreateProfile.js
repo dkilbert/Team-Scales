@@ -120,8 +120,8 @@ export default class CreateProfile extends Component {
             isError = true;
         }
         //Check if purpose section is empty
-        if (purpose == '' || purpose == 'Would you like to donate weight, or receive weight?'){
-            errorMsg += '\nSelect a Purpose: Donate or Recieve Weight';
+        if (purpose == '' || purpose == 'Would you like to donate weight, receive weight, or lose weight?'){
+            errorMsg += '\nSelect a Purpose: Donate, Recieve, or Lose weight';
             isError = true;
         }
         //Check if hobbies section is empty
@@ -281,8 +281,8 @@ export default class CreateProfile extends Component {
                                                 Purpose
                                             </Text>
                                         <RNPickerSelect
-                                            placeholder = {{label:'Donate or Recieve weight?', value: ''}}
-                                            items = {[{label: 'Donate', value: 'donate'}, {label: 'Receive', value: 'receive'}]}
+                                            placeholder = {{label:'Donate, Recieve, or Lose Weight?', value: ''}}
+                                            items = {[{label: 'Donate', value: 'donate'}, {label: 'Receive', value: 'receive'}, {label: 'Lose', value: 'lose'}]}
                                             onValueChange={purpose => this.setState({ purpose })}
                                             returnKeyType = 'done'
                                         />
