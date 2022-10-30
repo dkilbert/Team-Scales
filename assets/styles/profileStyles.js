@@ -34,7 +34,9 @@ const profileStyles = StyleSheet.create({
         fontSize: 24,
         fontFamily: 'Montserrat-SemiBold',
         color: "#000000",
-        marginTop: 14
+        marginTop: 14,
+        textTransform: "uppercase",
+        marginTop: 20
     },
     profilePicture:
     {
@@ -50,8 +52,9 @@ const profileStyles = StyleSheet.create({
         fontSize: 25,
         fontFamily: 'Montserrat-SemiBold',
         color: "#000000",
-        marginLeft: '10%',
-        marginBottom: 7
+        //marginLeft: '10%',
+        marginBottom: 7,
+        textAlign: "center"
     },
     profilePicAdd:
     {
@@ -71,7 +74,7 @@ const profileStyles = StyleSheet.create({
     profileRow:
     {
         flexDirection: 'row',
-        marginLeft: 20,
+        //marginLeft: 20,
     },
     heightInput:
     {
@@ -86,11 +89,7 @@ const profileStyles = StyleSheet.create({
         fontFamily: 'NunitoSans-Regular',
         width: 40,
         marginLeft: 10,
-    },
-    // profileButton: {
-        
-
-    // }
+    }
 })
 
 
