@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
-import { Text, View, Pressable, Modal, TextInput } from 'react-native'
+import { Text, View, Pressable, Modal, TextInput, FlatList, Image, Button } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
 import colors from '../../assets/colors/colors'
@@ -8,12 +8,17 @@ import fire from '../fire'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import LineChart from './LineChart'
 import './App.css';
+import { ScrollView } from 'react-native-gesture-handler'
 
 function Progress() {
     const usersDB = fire.firestore().collection('users')
     const userID = fire.auth().currentUser.uid
     const [modalVisible, setModalVisible] = useState(false);
     const [weight, setWeight] = useState('');
+    const [userList, setUserList] = useState(null);
+    const [splitUserList, setSplitUserList] = useState(null);
+    const [userDataIsRetrieved, setUserDataIsRetrieved] = useState(false);
+    const [currentUser, setCurrentUser] = useState(null);
     let today = new Date();
     let logDate = (today.getMonth()+1)+'/'+today.getDate()+'/'+today.getFullYear();
 
@@ -106,8 +111,37 @@ function Progress() {
         return data;
     }
 
+    function getCurrentUser() {
+        usersDB.where('id', '==', userID).get()
+            .then((querySnapshot) => {
+                let userData = querySnapshot.docs.map(doc => doc.data());
+                setCurrentUser(userData[0]);
+            })
+            .catch((error) => console.log('Error getting current user: ', error));
+    }
+
+    // if currentUser is null, call getCurrentUser to get the current user
+    if(currentUser == null) {
+        getCurrentUser();
+    }
+
+    const getUsers = () => {
+        usersDB.get().then(function(querySnapshot) {
+            let userData = querySnapshot.docs.map(doc => doc.data())
+            setUserList(userData)
+            setSplitUserList(userData.slice(10, 13))
+        }).catch(function(error) {console.log('Error getting documents: ', error)})
+
+        setUserDataIsRetrieved(true);
+    }
+
+    if (userDataIsRetrieved == false) {
+        getUsers();
+    }
+
     return (
         <LinearGradient colors={[colors.lightBlue, colors.darkBlue]} style={styles.outerScreen}>
+        <ScrollView showsVerticalScrollIndicator = {false}>
         <SafeAreaView style = {styles.contentCenter}>
             <StatusBar barStyle='light-content' />
             <View style={styles.header}>
@@ -197,8 +231,30 @@ function Progress() {
     </div>
                 <View style={styles.logWeightSection}>
                 </View>
+    <View>
+        <Text style = {styles.userName}> User's Available to Donate!</Text>
+    <React.Fragment>
+    {splitUserList != null &&
+                <FlatList
+                data={splitUserList}
+                renderItem={({item}) => 
+                    <View style = {styles.userData}>
+                            <Image source={{uri: item.profilePicId}} style={styles.profilePicture}/>
+                            <View style={{ alignItems: 'left'}}>
+                                <Text style= {styles.userName}>{item.first_name + " " + item.last_name}</Text>
+                            </View>
+                            <Button title = 'Donate!'> </Button>
+                    </View>}
+                //onEndReached = {() => continueList(startIndex, endIndex)}
+                //onEndReachedThreshold = {1}
+                keyExtractor = {(item, index) => index.toString()}
+                />
+            }
+    </React.Fragment>
+        </View>
             </View>            
         </SafeAreaView>
+        </ScrollView>
         </LinearGradient>
     )
 }
@@ -237,6 +293,23 @@ const styles = {
         borderStyle: 'solid',
         borderRadius: 5,
         color: '#000'
+    },
+    profilePicture: {
+        marginTop: 20,
+        marginBottom: 10,
+        width: 90,
+        height: 90,
+        borderRadius: 100,
+    },
+    userName: {
+        fontSize: 20,
+        color: '#000',
+        fontFamily: 'NunitoSans-Bold',
+    },
+    userData: {
+        borderWidth: 0.25,
+        borderColor: "#D3D3D3",
+        alignItems: 'center'
     },
     outerScreen:  {
         position: 'absolute',
