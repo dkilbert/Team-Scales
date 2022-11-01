@@ -22,94 +22,145 @@ function Progress() {
     let today = new Date();
     let logDate = (today.getMonth()+1)+'/'+today.getDate()+'/'+today.getFullYear();
 
-    // logWeight() - Takes the weight inputted by the user and writes it to the database
-    function logWeight() {
-        const loggedWeight = {
-            weight: weight,
-            date: logDate
-        }
+  // logWeight() - Takes the weight inputted by the user and writes it to the database
+  function logWeight() {
+    const loggedWeight = {
+      weight: weight,
+      date: logDate,
+    };
 
-        usersDB.doc(userID).collection("LoggedWeight").add(loggedWeight)
-        .then((result) => {
-            console.log(result)
-        })
-        .catch((error) => {
-            console.log(error)
-            Alert.alert('Error', error.message, [{text: 'OK'},], {cancelable: true});
+    usersDB
+      .doc(userID)
+      .collection("LoggedWeight")
+      .add(loggedWeight)
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log(error);
+        Alert.alert("Error", error.message, [{ text: "OK" }], {
+          cancelable: true,
         });
+      });
 
-        // setModalVisible is set to false so that modal is no longer visible
-        setModalVisible(!modalVisible)
-        // call loadData to update graph with new weight
-        loadData();
-    }
+    // setModalVisible is set to false so that modal is no longer visible
+    setModalVisible(!modalVisible);
+    // call loadData to update graph with new weight
+    loadData();
+    loadTableData();
+  }
 
-    // chartData useState hook that holds the default values and options for the chart
-    const [chartData, setChartData] = useState({
-        labels: [],
-        datasets: [{
-            label: 'Weight Progress',
-            data: [],
-            fill: true,
-            backgroundColor: 'rgba(0, 224, 255, 0.5)',
-            color: 'rgba(0, 224, 255, 0.3)'
-        }]
+  // chartData useState hook that holds the default values and options for the chart
+  const [chartData, setChartData] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: "Weight Progress",
+        data: [],
+        fill: true,
+        backgroundColor: "rgba(0, 224, 255, 0.5)",
+        color: "rgba(0, 224, 255, 0.3)",
+      },
+    ],
+  });
+
+  // loadData when component loads
+  useEffect(() => {
+    loadData();
+  }, []);
+
+//   const loadTableData = async () => {
+//     let data1 = await getDailyFoodData();
+
+//     let name = [];
+//     data1.forEach((element) => {
+//       name.push(element.name);
+//     });
+
+//     let calories = [];
+//     data1.forEach((element) => {
+//       calories.push(element.calories);
+//     });
+
+//     let createdAt = [];
+//     data1.forEach((element) => {
+//       createdAt.push(element.createdAt);
+//     });
+
+//     createData(name, calories, calories)
+//   };
+
+  // loadData() - Async function to retrieve data from the database to update chartData
+  const loadData = async () => {
+    // get data from getWeigthData which returns a sorted array of LoggedWeight by date
+    let data = await getWeightData();
+
+    // Take the weight from the data array to separate from the date
+    let weight = [];
+    data.forEach((element) => {
+      weight.push(element.weight);
     });
 
-    // loadData when component loads
-    useEffect(() => {
-        loadData()
-    }, [])
+    // Take the date from the data array to separate from the weight
+    let date = [];
+    data.forEach((element) => {
+      date.push(element.date);
+    });
 
-    // loadData() - Async function to retrieve data from the database to update chartData
-    const loadData = async () => {
-        // get data from getWeigthData which returns a sorted array of LoggedWeight by date
-        let data =  await getWeightData();
+    // setChartData to pass in the date array for the labels and weight array for the weight logged for the
+    // corresponding date
+    setChartData({
+      labels: date,
+      datasets: [
+        {
+          label: "Weight Progress",
+          data: weight,
+          fill: true,
+          backgroundColor: "rgba(0, 224, 255, 0.5)",
+          color: "rgba(0, 224, 255, 0.8)",
+        },
+      ],
+    });
+  };
 
-        // Take the weight from the data array to separate from the date
-        let weight = [];
-        data.forEach((element) => {
-            weight.push(element.weight)
-        })
+    // const getDailyFoodData = async () => {
+    //   let dataFood = [];
 
-        // Take the date from the data array to separate from the weight
-        let date = [];
-        data.forEach((element) => {
-            date.push(element.date)
-        })
+    //   // Load data from firebase to data variable
+    //   await usersDB
+    //     .doc(userID)
+    //     .collection("DailyFood")
+    //     .get()
+    //     .then((querySnapshot) => {
+    //       data = querySnapshot.docs.map((doc) => doc.data());
+    //     })
+    //     .catch((error) => console.log("Error getting weight data: ", error));
 
-        // setChartData to pass in the date array for the labels and weight array for the weight logged for the
-        // corresponding date
-        setChartData({
-            labels: date,
-            datasets: [{
-                label: 'Weight Progress',
-                data: weight,
-                fill: true,
-                backgroundColor: 'rgba(0, 224, 255, 0.5)',
-                color: 'rgba(0, 224, 255, 0.8)'
-            }]
-        })
-    }
+    //     return dataFood;
 
-    // getWeightData() - retrieves weight data from firebase and returns the data in an array that is sorted by date
-    const getWeightData = async () => {
-        let data = [];
-        // Load data from firebase to data variable
-        await usersDB.doc(userID).collection('LoggedWeight').get()
-        .then((querySnapshot) => {
-            data = querySnapshot.docs.map(doc => doc.data());
-        })
-        .catch((error) => console.log('Error getting weight data: ', error));
+    // }
 
-        // sort data by date
-        data.sort(function(a,b) {
-            return new Date(a.date) - new Date(b.date)
-        })
+  // getWeightData() - retrieves weight data from firebase and returns the data in an array that is sorted by date
+  const getWeightData = async () => {
+    let data = [];
+    // Load data from firebase to data variable
+    await usersDB
+      .doc(userID)
+      .collection("LoggedWeight")
+      .get()
+      .then((querySnapshot) => {
+        data = querySnapshot.docs.map((doc) => doc.data());
+      })
+      .catch((error) => console.log("Error getting weight data: ", error));
 
-        // return sorted array
-        return data;
-    }
+    // sort data by date
+    data.sort(function (a, b) {
+      return new Date(a.date) - new Date(b.date);
+    });
+
+    // return sorted array
+    return data;
+  };
 
     function getCurrentUser() {
         usersDB.where('id', '==', userID).get()
@@ -435,5 +486,4 @@ const styles = {
     }
 }
 
-
-export default Progress
+export default Progress;
