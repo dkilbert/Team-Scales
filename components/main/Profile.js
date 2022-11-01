@@ -17,18 +17,6 @@ const handleLogout = () => {
   fire.auth().signOut();
 };
 
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-  }
-  
-  const rows = [
-    createData("Frozen yoghurt", 150, 150 ),
-    createData("Ice cream sandwich", 150, 150),
-    createData("Eclair", 150, 150),
-    createData("Cupcake", 150, 150),
-    createData("Gingerbread", 150, 150),
-  ];
-
 //classes to use mui styling
 //const classes = useStyles();
 
