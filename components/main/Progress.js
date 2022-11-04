@@ -20,7 +20,7 @@ function Progress() {
     const [userDataIsRetrieved, setUserDataIsRetrieved] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
     let today = new Date();
-    let logDate = (today.getMonth()+1)+'/'+today.getDate()+'/'+today.getFullYear();
+    let logDate = today.toLocaleString('en-US');
 
   // logWeight() - Takes the weight inputted by the user and writes it to the database
   function logWeight() {
@@ -43,6 +43,7 @@ function Progress() {
         });
       });
 
+      updateWallet();
     // setModalVisible is set to false so that modal is no longer visible
     setModalVisible(!modalVisible);
     // call loadData to update graph with new weight
@@ -161,6 +162,31 @@ function Progress() {
     // return sorted array
     return data;
   };
+  const updateWallet = async () => {
+    //gets sorted weight data
+    let data =  await getWeightData();
+
+    //gets weight data
+    let weight = [];
+    data.forEach((element) => {
+        weight.push(element.weight)
+    })
+
+    let weightChange = weight[weight.length-2] - weight[weight.length-1]
+    console.log(weightChange)
+
+    const getWallet = async () => {
+        usersDB.where('id', '==', userID).get()
+        .then((querySnapshot) => {
+            let currentWallet = querySnapshot.docs.map(doc => doc.data().wallet);
+            console.log(currentWallet);
+            if(weightChange > 0){
+                usersDB.doc(userID).update({wallet : (weightChange + parseDouble(currentWallet))});
+            }
+        })
+    }
+    getWallet();
+}
 
     function getCurrentUser() {
         usersDB.where('id', '==', userID).get()
@@ -182,9 +208,26 @@ function Progress() {
             setUserList(userData)
             setSplitUserList(userData.slice(10, 13))
         }).catch(function(error) {console.log('Error getting documents: ', error)})
-
         setUserDataIsRetrieved(true);
     }
+    //Janelle's version of ^ with friends
+    const getFriendsByID = async () => {
+      const user = await usersDB.where('id', '==', userID).get();
+      const promises = [];
+      const receivers = [];
+      user.forEach(snapshot => {
+          promises.push(snapshot.ref.collection('userFriends').get());
+      })
+      const friends = await Promise.all(promises);
+      friends.forEach(snapshotArray => {
+        if(snapshotArray.docs.map(doc => doc.data().purpose) === 'receiver')
+        {
+          receivers.push(snapshotArray.docs.map(doc => doc.data()))
+        }
+      }).catch(function(error) {console.log('Error getting friends: ', error)})
+      setUserList(receivers)
+      setSplitUserList(userData.slice(10, 13))
+  }
 
     if (userDataIsRetrieved == false) {
         getUsers();
