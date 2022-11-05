@@ -9,11 +9,14 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import LineChart from './LineChart'
 import './App.css';
 import { ScrollView } from 'react-native-gesture-handler'
+import { faCheck, faDollarSign, faHandHoldingDollar, faScaleBalanced, faUser, faUsers, faWeightScale, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 function Progress() {
     const usersDB = fire.firestore().collection('users')
     const userID = fire.auth().currentUser.uid
-    const [modalVisible, setModalVisible] = useState(false);
+    const [modalVisibleWeight, setModalVisibleWeight] = useState(false);
+    const [modalVisibleDonate, setModalVisibleDonate] = useState(false);
     const [weight, setWeight] = useState('');
     const [userList, setUserList] = useState(null);
     const [splitUserList, setSplitUserList] = useState(null);
@@ -21,6 +24,7 @@ function Progress() {
     const [currentUser, setCurrentUser] = useState(null);
     let today = new Date();
     let logDate = (today.getMonth()+1)+'/'+today.getDate()+'/'+today.getFullYear();
+    const [amountDonated, setAmountDonated] = useState('');
 
   // logWeight() - Takes the weight inputted by the user and writes it to the database
   function logWeight() {
@@ -44,10 +48,9 @@ function Progress() {
       });
 
     // setModalVisible is set to false so that modal is no longer visible
-    setModalVisible(!modalVisible);
+    setModalVisibleWeight(!modalVisibleWeight);
     // call loadData to update graph with new weight
     loadData();
-    loadTableData();
   }
 
   // chartData useState hook that holds the default values and options for the chart
@@ -68,27 +71,6 @@ function Progress() {
   useEffect(() => {
     loadData();
   }, []);
-
-//   const loadTableData = async () => {
-//     let data1 = await getDailyFoodData();
-
-//     let name = [];
-//     data1.forEach((element) => {
-//       name.push(element.name);
-//     });
-
-//     let calories = [];
-//     data1.forEach((element) => {
-//       calories.push(element.calories);
-//     });
-
-//     let createdAt = [];
-//     data1.forEach((element) => {
-//       createdAt.push(element.createdAt);
-//     });
-
-//     createData(name, calories, calories)
-//   };
 
   // loadData() - Async function to retrieve data from the database to update chartData
   const loadData = async () => {
@@ -123,23 +105,6 @@ function Progress() {
     });
   };
 
-    // const getDailyFoodData = async () => {
-    //   let dataFood = [];
-
-    //   // Load data from firebase to data variable
-    //   await usersDB
-    //     .doc(userID)
-    //     .collection("DailyFood")
-    //     .get()
-    //     .then((querySnapshot) => {
-    //       data = querySnapshot.docs.map((doc) => doc.data());
-    //     })
-    //     .catch((error) => console.log("Error getting weight data: ", error));
-
-    //     return dataFood;
-
-    // }
-
   // getWeightData() - retrieves weight data from firebase and returns the data in an array that is sorted by date
   const getWeightData = async () => {
     let data = [];
@@ -162,29 +127,14 @@ function Progress() {
     return data;
   };
 
-    function getCurrentUser() {
-        usersDB.where('id', '==', userID).get()
-            .then((querySnapshot) => {
-                let userData = querySnapshot.docs.map(doc => doc.data());
-                setCurrentUser(userData[0]);
-            })
-            .catch((error) => console.log('Error getting current user: ', error));
-    }
-
-    // if currentUser is null, call getCurrentUser to get the current user
-    if(currentUser == null) {
-        getCurrentUser();
-    }
-
     const getUsers = () => {
-        usersDB.get().then(function(querySnapshot) {
-            let userData = querySnapshot.docs.map(doc => doc.data())
-            setUserList(userData)
-            setSplitUserList(userData.slice(10, 13))
-        }).catch(function(error) {console.log('Error getting documents: ', error)})
-
-        setUserDataIsRetrieved(true);
-    }
+      usersDB.where('purpose', '==', "receive").get().then(function(querySnapshot) {
+          let userData = querySnapshot.docs.map(doc => doc.data())
+          setUserList(userData)
+          setSplitUserList(userData.slice(0, 3))
+      }).catch(function(error) {console.log('Error getting documents: ', error)})
+      setUserDataIsRetrieved(true);
+  }
 
     if (userDataIsRetrieved == false) {
         getUsers();
@@ -198,7 +148,7 @@ function Progress() {
             <View style={styles.header}>
                 <Text style={styles.blank}>blank</Text>
                 <Text style={styles.pageHeader}>Progress</Text>
-                <Pressable style={styles.addButton} title="Users List" onPress={() => setModalVisible((modalVisible) => !modalVisible)}>
+                <Pressable style={styles.addButton} title="Log Weight" onPress={() => setModalVisibleWeight((modalVisibleWeight) => !modalVisibleWeight)}>
                     <MaterialCommunityIcons name="plus" color={'#fff'} size={26} />
                 </Pressable>
             </View>
@@ -207,13 +157,13 @@ function Progress() {
                 <Modal
                     animationType="fade"
                     transparent={true}
-                    visible={modalVisible}
+                    visible={modalVisibleWeight}
                 >
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
-                            <Text style={styles.modalText}>Log Weight</Text>
+                            <Text style={styles.modalText}>Log Weight <FontAwesomeIcon icon = {faScaleBalanced} size = '20'/></Text>
                             <View style={styles.bar}></View>
-                            <Text style={styles.inputHeader}>Enter Weight</Text>
+                            <Text style={styles.inputHeader}>Enter Weight <FontAwesomeIcon icon = {faWeightScale} size = '20'/></Text>
                             <TextInput 
                                 style = {styles.weightInput}
                                 keyboardType='numeric'
@@ -224,66 +174,28 @@ function Progress() {
                             <View style={styles.buttons}>
                                 <Pressable
                                     style={[styles.button, styles.cancelButton]}
-                                    onPress={() => setModalVisible(false)}
+                                    onPress={() => setModalVisibleWeight(false)}
                                     >
-                                        <Text style={[styles.textStyle, styles.red]}>Cancel</Text>
+                                        <Text style={[styles.textStyle, styles.red]}>Cancel <FontAwesomeIcon icon = {faXmark} size = '20'/></Text>
                                 </Pressable>
                                 <Pressable
                                     style={[styles.button, styles.logButton]}
                                     onPress={logWeight}
                                     >
-                                        <Text style={[styles.textStyle, styles.green]}>Submit</Text>
+                                        <Text style={[styles.textStyle, styles.green]}>Submit <FontAwesomeIcon icon = {faCheck} size = '20'/></Text>
                                 </Pressable>
                             </View>
                         </View>
                     </View>
                 </Modal>
-                <div>
-        <head>
-        </head>
-      <h1>Calories Intake</h1>
-      <table class = 'table-dark' >
-        <thead>
-        <tr>
-          <th>Food</th>
-          <th>Calories </th>
-          <th>Total Calories </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>Apple</td>
-            <td>23</td>
-            <td>23</td>
-            
-          </tr>
-          <tr>
-            <td>Burger</td>
-            <td>24</td>
-            <td>47</td>
-          </tr>
-          <tr>
-            <td>Juice</td>
-            <td>29</td>
-            <td>76</td>
-          </tr>
-          <tr>
-            <td>Salad</td>
-            <td>26</td>
-            <td>102</td>
-          </tr>
-          <tr>
-            <td>Pizza</td>
-            <td>270</td>
-            <td>372</td>
-          </tr>
-          </tbody>
-      </table>
-    </div>
                 <View style={styles.logWeightSection}>
                 </View>
     <View>
-        <Text style = {styles.userName}> User's Available to Donate!</Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'center'}}>
+          <FontAwesomeIcon icon = {faUsers} size = '20'/>
+          <Text style = {styles.userName}> User's Available to Donate to!</Text>
+        </View>
+        
     <React.Fragment>
     {splitUserList != null &&
                 <FlatList
@@ -292,9 +204,51 @@ function Progress() {
                     <View style = {styles.userData}>
                             <Image source={{uri: item.profilePicId}} style={styles.profilePicture}/>
                             <View style={{ alignItems: 'left'}}>
-                                <Text style= {styles.userName}>{item.first_name + " " + item.last_name}</Text>
+                                <Text style= {styles.userName}> <FontAwesomeIcon icon = {faUser} size = '20'/> {item.first_name + " " + item.last_name}</Text>
                             </View>
-                            <Button title = 'Donate!'> </Button>
+                            <Button title = 'Donate!' onPress={() => setModalVisibleDonate((modalVisibleDonate) => !modalVisibleDonate)}> </Button>
+                            <Modal 
+                              animationType="fade"
+                              transparent={true}
+                              visible={modalVisibleDonate}>
+                              <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <Text style={styles.modalText}>Donate Weight! <FontAwesomeIcon icon = {faHandHoldingDollar} size='20'/></Text>
+                            <View style={styles.bar}></View>
+                            <Text style={styles.inputHeader}>Enter Weight Amount  <FontAwesomeIcon icon = {faWeightScale} size='20'/> </Text>
+                            <TextInput 
+                                style = {styles.weightInput}
+                                keyboardType='numeric'
+                                placeholder = 'lbs'
+                                returnKeyType = 'done'
+                                onChangeText = {donationAmount => setAmountDonated(donationAmount)}
+                            />
+                            <View style={styles.bar}></View>
+                            <Text style={styles.inputHeader}>Donation Amount <FontAwesomeIcon icon = {faDollarSign} size='20'/></Text>
+                            <TextInput 
+                                style = {styles.weightInput}
+                                keyboardType='numeric'
+                                placeholder = {'$' + amountDonated}
+                                returnKeyType = 'done'
+                                editable = {false}
+                            />
+                            <View style={styles.buttons}>
+                                <Pressable
+                                    style={[styles.button, styles.cancelButton]}
+                                    onPress={() => setModalVisibleDonate(false)}
+                                    >
+                                        <Text style={[styles.textStyle, styles.red]}>Cancel <FontAwesomeIcon icon = {faXmark} size = '20'/></Text>
+                                </Pressable>
+                                <Pressable
+                                    style={[styles.button, styles.logButton]}
+                                    onPress={() => setModalVisibleDonate(false)}
+                                    >
+                                        <Text style={[styles.textStyle, styles.green]}>Submit <FontAwesomeIcon icon = {faCheck} size = '20'/></Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                    </View>
+                            </Modal>
                     </View>}
                 //onEndReached = {() => continueList(startIndex, endIndex)}
                 //onEndReachedThreshold = {1}
