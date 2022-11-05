@@ -7,6 +7,10 @@ function FriendRequests() {
     const friendsDB = fire.firestore().collection('friendships');
     const currentUserID = fire.auth().currentUser.uid;
 
+    //set up friend entity
+    let user1Friend = undefined;
+    let user2Friend = undefined;
+
     const [friendRequests, setFriendRequests] = useState(null);
 
     // Retrieves friendRequests from firebase
@@ -44,10 +48,40 @@ function FriendRequests() {
             
             // If friendship does NOT exist -> write the friendship between 2 users to firebase
             if (!friendshipExists) {
+                //gets data from the current user then writes userFriend to firebase
+                const user1Data = async () => {
+                    const snapshot = await usersDB.doc(currentUserID).get();
+                    const user1FN = snapshot.data().first_name;
+                    const user1LN = snapshot.data().last_name;
+                    const user1ID = snapshot.data().id;
+                    const user1Purpose = snapshot.data().purpose;
+                    const user1Photo = snapshot.data().profilePicId;
+                    user1Friend = {userID : user1ID, userFName : user1FN, userLN : user1LN, userPurpose : user1Purpose, userPhoto : user1Photo};
+                    console.log(user1Friend)
+                    usersDB.doc(user2.userID).collection("userFriends").add(user1Friend);
+                }
+                user1Data();
+
+                //gets data from the user2 then writes userFriend to firebase
+                const user2Data = async () => {
+                    const snapshot = await usersDB.doc(user2.userID).get();
+                    const user2FN = snapshot.data().first_name;
+                    const user2LN = snapshot.data().last_name;
+                    const user2ID = snapshot.data().id;
+                    const user2Purpose = snapshot.data().purpose;
+                    const user2Photo = snapshot.data().profilePicId;
+                    user2Friend = {userID : user2ID, userFName : user2FN, userLN : user2LN, userPurpose : user2Purpose, userPhoto : user2Photo};
+                    console.log(user2Friend)
+                    usersDB.doc(currentUserID).collection("userFriends").add(user2Friend);
+                }
+                user2Data();
+
                 // Create friendship in firebase between 2 users
                 friendsDB.add({user1: user2.userID, user2: currentUserID})
+
                 // delete the friend request from the receiving user
                 removeFriendRequest(user2);
+
                 // Alert the user that friend request has been accepted
                 alert('Friend request accepted');
             }
@@ -72,6 +106,7 @@ function FriendRequests() {
 
         return doc.id;
     }
+    
 
     return (
         <React.Fragment>
