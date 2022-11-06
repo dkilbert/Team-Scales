@@ -106,6 +106,21 @@ function Progress() {
     });
   };
 
+    // getCurrentUser() - Retrieve the user using the app
+    function getCurrentUser() {
+        usersDB.where('id', '==', userID).get()
+            .then((querySnapshot) => {
+                let userData = querySnapshot.docs.map(doc => doc.data());
+                setCurrentUser(userData[0]);
+            })
+            .catch((error) => console.log('Error getting current user: ', error));
+    }
+
+    // if currentUser is null, call getCurrentUser to get the current user
+    if(currentUser == null) {
+        getCurrentUser();
+    }
+
   // getWeightData() - retrieves weight data from firebase and returns the data in an array that is sorted by date
   const getWeightData = async () => {
     let data = [];
@@ -141,29 +156,53 @@ function Progress() {
     console.log(weightChange)
 
     const getWallet = async () => {
-        usersDB.where('id', '==', userID).get()
-        .then((querySnapshot) => {
-            let currentWallet = querySnapshot.docs.map(doc => doc.data().wallet);
+        usersDB.doc(userID).get()
+        .then((snapshot) => {
+            let currentWallet = snapshot.data().wallet;
             console.log(currentWallet);
             if(weightChange > 0){
-                usersDB.doc(userID).update({wallet : (weightChange + parseDouble(currentWallet))});
+                usersDB.doc(userID).update({wallet : (weightChange + parseFloat(currentWallet))});
             }
         })
     }
     getWallet();
 }
-
+//where('purpose', '==', "receive")
     const getUsers = () => {
       usersDB.where('purpose', '==', "receive").get().then(function(querySnapshot) {
           let userData = querySnapshot.docs.map(doc => doc.data())
           setUserList(userData)
-          setSplitUserList(userData.slice(0, 3))
+          setSplitUserList(userData.slice(0,4))
       }).catch(function(error) {console.log('Error getting documents: ', error)})
       setUserDataIsRetrieved(true);
   }
 
     if (userDataIsRetrieved == false) {
         getUsers();
+    }
+
+    function weightExchange(receiver, amountDonated){
+
+        const getDonatorWallet = async () => {
+            usersDB.doc(userID).get()
+            .then((querySnapshot) => {
+                let donatorWallet = querySnapshot.data().wallet;
+                usersDB.doc(userID).update({wallet: (parseFloat(donatorWallet) - parseFloat(amountDonated))});
+                console.log(donatorWallet);
+            })
+        }
+        getDonatorWallet();
+
+        const getReceiverWallet = async () => {
+            usersDB.doc(receiver.id).get()
+            .then((querySnapshot) => {
+                let receiverWallet = querySnapshot.data().wallet;
+                usersDB.doc(receiver.id).update({wallet: (parseFloat(amountDonated) + parseFloat(receiverWallet))});
+                console.log(receiverWallet);
+                alert("success!");
+            })
+        }
+        getReceiverWallet();
     }
 
     return (
@@ -267,7 +306,7 @@ function Progress() {
                                 </Pressable>
                                 <Pressable
                                     style={[styles.button, styles.logButton]}
-                                    onPress={() => setModalVisibleDonate(false)}
+                                    onPress={() => {weightExchange(item, amountDonated); setModalVisibleDonate(false);}}
                                     >
                                         <Text style={[styles.textStyle, styles.green]}>Submit <FontAwesomeIcon icon = {faCheck} size = '20'/></Text>
                                 </Pressable>
@@ -278,7 +317,7 @@ function Progress() {
                     </View>}
                 //onEndReached = {() => continueList(startIndex, endIndex)}
                 //onEndReachedThreshold = {1}
-                keyExtractor = {(item, index) => index.toString()}
+                //keyExtractor = {(item, index) => index.toString()}
                 />
             }
     </React.Fragment>
