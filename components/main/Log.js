@@ -12,7 +12,7 @@ export default function Log() {
 
     // Set today's date to track calories for today
     let today = new Date();
-    let logDate = today.toLocaleString('en-US');
+    let logDate = today.toDateString(today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate());
 
     const usersDB = fire.firestore().collection('users')
     const userID = fire.auth().currentUser.uid
