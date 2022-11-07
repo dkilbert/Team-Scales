@@ -115,4 +115,12 @@ This should launch Expo in your browser where you can then run it as a web appli
   </details>
   
   
+  # Technologies
+<details><summary>Expand</summary>
+  NodeJS
+  Firebase
+  Expo CLI
+  Edamam API
+  </details>
+  
   
