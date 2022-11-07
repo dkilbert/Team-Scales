@@ -205,7 +205,7 @@ export default function Log() {
                                     borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomRightRadius: 20,
                                     borderBottomLeftRadius: 20, backgroundColor: "#FFFFFF", borderBottomWidth: 4, borderBottomColor: colors.darkBlue,
                                     borderTopColor: colors.darkBlue, borderTopWidth: 4, padding: 15, marginBottom: 20}}>
-                        <Text style = {styles.contentCenter}>   {Math.round(purposeCalories)} Cal        -          {Math.round(dailyCalories)} Cal        =         {Math.round(purposeCalories - dailyCalories)} Cal 
+                        <Text style = {styles.contentCenter}>   {Math.round(purposeCalories)} Cal        -          {Math.round(dailyCalories)} Cal        =         {Math.round(Math.max(0,purposeCalories - dailyCalories))} Cal 
                             {"\n"}   <FontAwesomeIcon icon={faStar} size='20'/> <span style={{fontWeight: 'bold'}}>Goal            </span>      <FontAwesomeIcon icon={faLocationDot} size='20'/> <span style={{fontWeight: 'bold'}}>Current        </span>       <FontAwesomeIcon icon={faHourglassHalf} size='20'/> <span style={{fontWeight: 'bold'}}>Remaining</span></Text>
                     </View> 
 

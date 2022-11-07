@@ -13,8 +13,6 @@ import { ImageBackground } from 'react-native-web';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { TextInput } from 'react-native-gesture-handler';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBalanceScale, faBirthdayCake, faInfoCircle, faRulerVertical, faStar, faUser, faVenusMars } from '@fortawesome/free-solid-svg-icons'
 
 export default class CreateProfile extends Component {
 
@@ -45,7 +43,7 @@ export default class CreateProfile extends Component {
     onCreateProfile = () => {
         // retrieves all user attributes from the state to persist to database
         const { email, password, first_name, last_name, sex, age, feet, inches, weight, bmi, purpose, hobbies } = this.state;
-
+        const wallet = 0.0;
         // Calculate the bmi for the user given the user attributes
         let bmiCalc = this.calcBMI();
 
@@ -66,6 +64,8 @@ export default class CreateProfile extends Component {
                 hobbies,
                 profilePicId: 'https://firebasestorage.googleapis.com/v0/b/weightexchangeapplication.appspot.com/o/image%2Fdefault-avatar.jpg?alt=media&token=057e9e50-5f95-4123-967c-ede0dea7076a',
                 id: fire.auth().currentUser.uid,
+                email,
+                wallet,
             }).then(() => {
                 console.log("Document successfully written!");
                 this.setState({ bmi: bmi });
@@ -120,8 +120,8 @@ export default class CreateProfile extends Component {
             isError = true;
         }
         //Check if purpose section is empty
-        if (purpose == '' || purpose == 'Would you like to donate weight, receive weight, or lose weight?'){
-            errorMsg += '\nSelect a Purpose: Donate, Recieve, or Lose weight';
+        if (purpose == '' || purpose == 'Would you like to donate, receive, or lose weight?'){
+            errorMsg += '\nSelect a Purpose: Donate, Recieve, or Lose Weight';
             isError = true;
         }
         //Check if hobbies section is empty
@@ -205,7 +205,7 @@ export default class CreateProfile extends Component {
                                     </View>
 
                                     <View style={styles.action}>
-                                        <FontAwesomeIcon icon={faUser} size='20'/>
+                                        <FontAwesome name="user" size={20} />
                                         <TextInput
                                             placeholder='First Name'
                                             onChangeText={first_name => this.setState({ first_name })}
@@ -215,9 +215,9 @@ export default class CreateProfile extends Component {
                                         />
                                     </View>
                                     <View style={styles.action}>
-                                        <FontAwesomeIcon icon={faUser} size='20'/>
+                                        <FontAwesome name="user" size={20} />
                                         <TextInput
-                                            placeholder='Last Name'
+                                            placeholder='Last'
                                             onChangeText={last_name => this.setState({ last_name })}
                                             placeholderTextColor="#000000"
                                             autoCorrect={false}
@@ -225,7 +225,7 @@ export default class CreateProfile extends Component {
                                         />
                                     </View>
                                     <View style={styles.action}>
-                                        <FontAwesomeIcon icon={faVenusMars} size='20'/>
+                                        <FontAwesome name="venus-mars" size={20} />
                                         <Text style = {styles.textInput}>
                                                 Sex
                                             </Text>
@@ -236,7 +236,7 @@ export default class CreateProfile extends Component {
                                         />
                                     </View>
                                     <View style={styles.action}>
-                                        <FontAwesomeIcon icon={faBirthdayCake} size='20'/>
+                                        <FontAwesome name="birthday-cake" size={20} />
                                         <TextInput
                                             placeholder='Age'
                                             onChangeText={age => this.setState({ age })}
@@ -246,7 +246,7 @@ export default class CreateProfile extends Component {
                                         />
                                     </View>
                                     <View style={styles.action}>
-                                        <FontAwesomeIcon icon={faRulerVertical} size='20'/>
+                                        <FontAwesome name="id-card" size={20} />
                                         <TextInput
                                             placeholder='Feet'
                                             onChangeText={feet => this.setState({ feet })}
@@ -256,7 +256,7 @@ export default class CreateProfile extends Component {
                                         />
                                     </View>
                                     <View style={styles.action}>
-                                        <FontAwesomeIcon icon={faRulerVertical} size='20'/>
+                                        <FontAwesome name="id-card" size={20} />
                                         <TextInput
                                             placeholder='Inches'
                                             onChangeText={inches => this.setState({ inches })}
@@ -266,7 +266,7 @@ export default class CreateProfile extends Component {
                                         />
                                     </View>
                                     <View style={styles.action}>
-                                        <FontAwesomeIcon icon={faBalanceScale} size='20'/>
+                                        <FontAwesome name="balance-scale" size={20} />
                                         <TextInput
                                             placeholder='Weight'
                                             onChangeText={weight => this.setState({ weight })}
@@ -276,7 +276,7 @@ export default class CreateProfile extends Component {
                                         />
                                     </View>
                                     <View style={styles.action}>
-                                        <FontAwesomeIcon icon={faStar} size='20'/>
+                                        <FontAwesome name="id-card" size={20} />
                                         <Text style = {styles.textInput}>
                                                 Purpose
                                             </Text>
@@ -288,7 +288,7 @@ export default class CreateProfile extends Component {
                                         />
                                     </View>
                                     <View style={styles.action}>
-                                        <FontAwesomeIcon icon={faInfoCircle} size='20'/>
+                                        <FontAwesome name="info" size={20} />
                                         <TextInput
                                             placeholder='Hobbies'
                                             onChangeText={hobbies => this.setState({ hobbies })}
