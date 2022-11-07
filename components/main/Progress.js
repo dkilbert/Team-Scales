@@ -7,7 +7,6 @@ import colors from '../../assets/colors/colors'
 import fire from '../fire'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import LineChart from './LineChart'
-import './App.css';
 import { ScrollView } from 'react-native-gesture-handler'
 import { faCheck, faDollarSign, faHandHoldingDollar, faScaleBalanced, faUser, faUsers, faWeightScale, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
