@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
-import { Text, View, Pressable, Modal, TextInput, FlatList, Image, Button } from 'react-native'
+import { Text, View, Button,TextInput, Image, FlatList, Modal, TouchableOpacity, Pressable,} from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
 import colors from '../../assets/colors/colors'
@@ -8,8 +8,11 @@ import fire from '../fire'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import LineChart from './LineChart'
 import { ScrollView } from 'react-native-gesture-handler'
-import { faCheck, faDollarSign, faHandHoldingDollar, faScaleBalanced, faUser, faUsers, faWeightScale, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faPen, faTrash,faCheck, faDollarSign, faHandHoldingDollar, faScaleBalanced, faUser, faUsers, faWeightScale, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+import uuid from "react-native-uuid";
+
 
 function Progress() {
     const usersDB = fire.firestore().collection('users')
@@ -23,7 +26,19 @@ function Progress() {
     const [currentUser, setCurrentUser] = useState(null);
     let today = new Date();
     const [amountDonated, setAmountDonated] = useState('');
-    let logDate = today.toLocaleString('en-US');
+    let logDate = today.toDateString(
+        today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate());
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isInnerModal, setIsInnerModalVisible] = useState(false);
+    const [isEditModal, setEditModalVisible] = useState(false);
+    const [editedFood, setEditFood] = useState("");
+    const [editedCalories, setEditCalories] = useState("");
+    const [dailyFood, setDailyFood] = useState(null);
+    const [splitDailyFood, setSplitDailyFood] = useState(null);
+    const [food, setFood] = useState("");
+    const [calories, setCalories] = useState("");
+    let newDailyFood = undefined;
+
 
   // logWeight() - Takes the weight inputted by the user and writes it to the database
   function logWeight() {
@@ -203,6 +218,177 @@ function Progress() {
         }
         getReceiverWallet();
     }
+    ////////////
+    // getUserInfo() - Retrieves all user info from firebase
+    const getUserInfo = () => {
+        // Retreieve DailyFood collection that stores the different food tracked for the current date which is stored in the logDate variable
+        usersDB
+            .doc(userID)
+            .collection("DailyFood")
+            .where("createdAt", "==", logDate)
+            .get()
+            .then((querySnapshot) => {
+                let dailyFoodData = querySnapshot.docs.map((doc) => doc.data());
+                setDailyFood(dailyFoodData);
+                setSplitDailyFood(dailyFoodData.slice(0, 5));
+                setUserDataIsRetrieved(true);
+                // Update calories shown to user to reflect what is in the database
+                changeDailyCalories();
+            })
+            .catch((error) => {
+                console.log("Error getting documents: ", error);
+            });
+    };
+
+    // updateLog() - adds the new food added to firebase
+    function updateLog() {
+        usersDB
+            .doc(userID)
+            .collection("DailyFood")
+            .add(newDailyFood)
+            .then((result) => {
+                console.log(result);
+            })
+            .catch((error) => {
+                console.log(error);
+                Alert.alert("Error", error.message, [{ text: "OK" }], {
+                    cancelable: true,
+                });
+            });
+
+        setUserDataIsRetrieved(false);
+        }
+        function typeNewFood(name, calories) {
+            let timestamp = logDate;
+    
+            newDailyFood = {
+                id: uuid.v4(),
+                name: name,
+                calories: calories,
+                createdAt: timestamp,
+            };
+    
+            // Call updateLog to add this food entered to firebase
+            updateLog();
+            alert("You added: " + name);
+    
+            // Update the state of the component to clear input boxes and show latest food
+            setFood("");
+            setCalories("");
+            changeDailyCalories();
+        }
+        // continueList() - This function retrieves more items from the database to display to the user
+    const continueList = () => {
+        setSplitDailyFood(dailyFood.slice(0,-5));
+       // setStartIndex(startIndex + 5);
+       // setEndIndex(endIndex + 5);
+    }
+    // ensure database info is return
+    if (userDataIsRetrieved == false) {
+        getUserInfo();
+    }
+     // delete a food object from firebase and useState
+
+     const handleEditFood = async (id, editedFood) => {
+        let mydoc = await usersDB
+            .doc(userID)
+            .collection("DailyFood")
+            .where("id", "==", id)
+            .get();
+        // console.log("==========");
+        // console.log(mydoc);
+        //console.log("=========");
+
+        mydoc.forEach((doc) => {
+            const docRef = usersDB.doc(userID).collection("DailyFood").doc(doc.id);
+            console.log("==========");
+            console.log(doc.id);
+            console.log("=========");
+            docRef.update({ name: editedFood });
+        });
+
+        getUserInfo();
+        setIsInnerModalVisible(false);
+    };
+
+    const handleEditCalorie = async (id, editedCalories) => {
+        let mydoc = await usersDB
+            .doc(userID)
+            .collection("DailyFood")
+            .where("id", "==", id)
+            .get();
+        // console.log("==========");
+        //  console.log(mydoc);
+        //  console.log("=========");
+        mydoc.forEach((doc) => {
+            const docRef = usersDB.doc(userID).collection("DailyFood").doc(doc.id);
+
+            docRef.update({ calories: editedCalories });
+        });
+
+        getUserInfo();
+        setEditModalVisible(false);
+    };
+
+    const handleDelete = (foodId) => {
+        const itemRef = usersDB
+            .doc(userID)
+            .collection("DailyFood")
+            .where("id", "==", foodId);
+        console.log(foodId);
+        //execute query, loop over snapshot and delete document data based on reference
+        itemRef.get().then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+                doc.ref.delete();
+            });
+        });
+
+        // returns a list without foodId
+        setDailyFood(dailyFood.filter((item) => item.id !== foodId));
+        alert("Item deleted");
+    };
+
+    // By default the userDataIsRetrieved useState hook is set to false
+    // If it is false then getUserInfo() will be called to get userInfo
+    if (userDataIsRetrieved == false) {
+        getUserInfo();
+    }
+
+    const onChanged = (text) => {
+        let newText = "";
+        let numbers = "0123456789";
+
+        for (var i = 0; i < text.length; i++) {
+            if (numbers.indexOf(text[i]) > -1) {
+                newText = newText + text[i];
+            } else {
+                alert("Please enter numbers ");
+            }
+        }
+        setWeight(newText);
+    };
+
+    function validateWeightInput(weight) {
+        let errorMsg = "Input field cannot be empty";
+        let isError = false;
+
+        if (weight == "" || weight < 0) {
+            isError = true;
+        }
+
+        //If an error was detected.
+        if (isError == true) {
+            alert(errorMsg);
+            isError = false;
+        }
+        // If input is valid
+        else {
+            logWeight();
+        }
+
+        setWeight("");
+    }
+
 
     return (
         <LinearGradient colors={[colors.lightBlue, colors.darkBlue]} style={styles.outerScreen}>
@@ -211,7 +397,7 @@ function Progress() {
             <StatusBar barStyle='light-content' />
             <View style={styles.header}>
                 <Text style={styles.blank}>blank</Text>
-                <Text style={styles.pageHeader}>Progress</Text>
+                <Text style={styles.pageHeader}>Dashboard</Text>
                 <Pressable style={styles.addButton} title="Log Weight" onPress={() => setModalVisibleWeight((modalVisibleWeight) => !modalVisibleWeight)}>
                     <MaterialCommunityIcons name="plus" color={'#fff'} size={26} />
                 </Pressable>
@@ -254,6 +440,230 @@ function Progress() {
                 </Modal>
                 <View style={styles.logWeightSection}>
                 </View>
+                <View>
+                        <Text style = {{fontSize: 50, fontWeight:'bold', textAlign: 'center',fontStyle:'italic'}}
+                        >Calories Intake</Text>
+                    </View>
+                    <View style={{ flexDirection: "row" }}>
+                        <Text
+                            style={{
+                                width: 220,
+                                textAlign: "center",
+                                backgroundColor: colors.lightBlue,
+                                fontSize: "20",
+                                fontWeight: "bold",
+                            }}
+                        >
+                            Food Name
+                        </Text>
+                        <Text
+                            style={{
+                                flex: 1,
+                                width: 150,
+                                textAlign: "center",
+                                backgroundColor: colors.darkBlue,
+                                fontSize: "20",
+                                fontWeight: "bold",
+                            }}
+                        >
+                            Calories
+                        </Text>
+                        <Text
+                            style={{
+                                width: 60,
+                                textAlign: "center",
+                                backgroundColor: "blue",
+                                fontSize: "20",
+                                fontWeight: "bold",
+                                color: "white",
+                            }}
+                        >
+                            Edit
+                        </Text>
+                    </View>
+
+                    <FlatList
+                        data={dailyFood}
+                        
+                        renderItem={({ item }) => (
+                            <TouchableOpacity style={{}}>
+                                {item.createdAt === logDate && (
+                                    <View style={{ flexDirection: "row" }}>
+                                        <Text
+                                            style={{
+                                                width: 400,
+                                                textAlign: "center",
+                                                backgroundColor: colors.lightBlue,
+                                                fontSize: "20",
+                                                fontWeight: "bold",
+                                            }}
+                                        >
+                                            {item.name}
+                                        </Text>
+
+                                        <Text
+                                            style={{
+                                                textAlign: "center",
+                                                fontSize: "20",
+                                                fontWeight: "bold",
+                                                width: 200,
+                                                backgroundColor: colors.darkBlue,
+                                            }}
+                                        >
+                                            {item.calories}
+                                        </Text>
+
+                                        <View style={styles.deleteButton}>
+                                            <Button
+                                                title={<FontAwesomeIcon icon={faTrash} size='10' />}
+                                                onPress={() => {
+                                                    handleDelete(item.id);
+                                                }}
+                                                style={styles.foodCalories}
+                                            />
+                                        </View>
+                                        <View>
+                                            <Button
+                                                title={<FontAwesomeIcon icon={faPen} size='10' />}
+                                                onPress={() => {
+                                                    setIsModalVisible(true);
+                                                }}
+                                            />
+                                        </View>
+                                    </View>
+                                )}
+
+                                <View>
+                                    <Modal
+                                        animationType="fade"
+                                        transparent={true}
+                                        visible={isModalVisible}
+                                    >
+                                        <View style={styles.centeredView}>
+                                            <View style={styles.modalView}>
+                                                <Text>Edit window</Text>
+
+                                                <View style={styles.buttons}>
+                                                    <Pressable
+                                                        style={[styles.button, styles.logButton]}
+                                                        onPress={() => setIsInnerModalVisible(true)}
+                                                    >
+                                                        <Text style={[styles.textStyle, styles.green]}>
+                                                            Edit food
+                                                        </Text>
+                                                    </Pressable>
+
+                                                    <Pressable
+                                                        style={[styles.button, styles.cancelButton]}
+                                                        onPress={() => setEditModalVisible(true)}
+                                                    >
+                                                        <Text style={[styles.textStyle, styles.red]}>
+                                                            Edit calories
+                                                        </Text>
+                                                    </Pressable>
+                                                </View>
+                                                <View style={styles.buttonsDone}>
+                                                    <Pressable
+                                                        style={[styles.button, styles.doneButton]}
+                                                        onPress={() => setIsModalVisible(false)}
+                                                    >
+                                                        <Text style={[styles.textStyle]}>Done</Text>
+                                                    </Pressable>
+                                                </View>
+                                            </View>
+                                        </View>
+                                    </Modal>
+                                </View>
+
+                                <Modal
+                                    animationType="fade"
+                                    transparent={true}
+                                    visible={isInnerModal}
+                                >
+                                    <View style={styles.centeredView}>
+                                        <View style={styles.modalView}>
+                                            <Text>Edit Food</Text>
+
+                                            <TextInput
+                                                placeholder="food"
+                                                returnKeyType="done"
+                                                value={editedFood}
+                                                onChangeText={(text) => setEditFood(text)}
+                                            />
+                                            <View style={styles.buttons}>
+                                                <Pressable
+                                                    style={[styles.button, styles.logButton]}
+                                                    onPress={() => handleEditFood(item.id, editedFood)}
+                                                >
+                                                    <Text style={[styles.textStyle, styles.green]}>
+                                                        Save
+                                                    </Text>
+                                                </Pressable>
+
+                                                <Pressable
+                                                    style={[styles.button, styles.cancelButton]}
+                                                    onPress={() => setIsInnerModalVisible(false)}
+                                                >
+                                                    <Text style={[styles.textStyle, styles.red]}>
+                                                        Cancel
+                                                    </Text>
+                                                </Pressable>
+                                            </View>
+                                        </View>
+                                    </View>
+                                </Modal>
+
+                                <Modal
+                                    animationType="fade"
+                                    transparent={true}
+                                    visible={isEditModal}
+                                >
+                                    <View style={styles.centeredView}>
+                                        <View style={styles.modalView}>
+                                            <Text>Edit Calories</Text>
+
+                                            <TextInput
+                                                placeholder="calories"
+                                                returnKeyType="done"
+                                                value={editedCalories}
+                                                onChangeText={(text) => setEditCalories(text)}
+                                            />
+                                            <View style={styles.buttons}>
+                                                <Pressable
+                                                    style={[styles.button, styles.logButton]}
+                                                    onPress={() =>
+                                                        handleEditCalorie(item.id, editedCalories)
+                                                    }
+                                                >
+                                                    <Text style={[styles.textStyle, styles.green]}>
+                                                        Save
+                                                    </Text>
+                                                </Pressable>
+
+                                                <Pressable
+                                                    style={[styles.button, styles.cancelButton]}
+                                                    onPress={() => setEditModalVisible(false)}
+                                                >
+                                                    <Text style={[styles.textStyle, styles.red]}>
+                                                        Cancel
+                                                    </Text>
+                                                </Pressable>
+                                            </View>
+                                        </View>
+                                    </View>
+                                </Modal>
+                            </TouchableOpacity>
+                        )}
+                         extraData={dailyFood}
+                         onEndReached={() => continueList()}
+                        onEndReachedThreshold={1}
+                        keyExtractor={(item, index) => index.toString()}
+                    />
+
+
+
+
+
     <View>
         <View style={{ flexDirection: 'row', justifyContent: 'center'}}>
           <FontAwesomeIcon icon = {faUsers} size = '20'/>
