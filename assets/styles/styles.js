@@ -1,4 +1,5 @@
 import { StyleSheet, Platform } from "react-native";
+import colors from '../../assets/colors/colors'
 
 const styles = StyleSheet.create({
     loginPrompt:
@@ -204,6 +205,22 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         textTransform: "uppercase"
       },
+      wContainer: {
+        flex: "0.2",
+        padding: "2%",
+        alignItems: "center",
+        justifyContent: 'center',
+        backgroundColor: "#f2f2f2",
+        opacity: "0.4",
+        borderColor: colors.darkBlue,
+        marginBottom: "3%",
+        borderWidth: 4, 
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20, 
+        borderBottomRightRadius: 20,
+        borderBottomLeftRadius: 20,
+        
+      }
 })
 
 export default styles;

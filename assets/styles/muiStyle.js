@@ -7,7 +7,7 @@ const useStyles = makeStyles({
     field: {
         display: "block",
         marginLeft: 10,
-        marginBottom: 25,
+        marginBottom: 20,
         flexDirection: 'row',
     }
 })
