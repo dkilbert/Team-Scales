@@ -18,6 +18,7 @@ import fire from "../fire";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import LineChart from "./LineChart";
 import "./App.css";
+import { set } from "react-native-reanimated";
 
 function Progress() {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -29,7 +30,6 @@ function Progress() {
   const userID = fire.auth().currentUser.uid;
   const [modalVisible, setModalVisible] = useState(false);
   const [weight, setWeight] = useState("");
-
 
   let today = new Date();
   let logDate = today.toDateString(
@@ -181,19 +181,26 @@ function Progress() {
       const docRef = usersDB.doc(userID).collection("DailyFood").doc(doc.id);
       docRef.update({ name: editedFood });
     });
-
     getUserInfo();
+    setEditFood("");
     setIsInnerModalVisible(false);
   };
 
   //Allow user to edit calorie field
   const handleEditCalorie = async (id, editedCalories) => {
-    let mydoc = await usersDB.doc(userID).collection("DailyFood").where("id", "==", id).get();
+    let mydoc = await usersDB
+      .doc(userID)
+      .collection("DailyFood")
+      .where("id", "==", id)
+      .get();
     mydoc.forEach((doc) => {
       const docRef = usersDB.doc(userID).collection("DailyFood").doc(doc.id);
       docRef.update({ calories: editedCalories });
     });
+    //update field in our usestate
     getUserInfo();
+    setEditCalories("");
+    //closes pop up
     setEditModalVisible(false);
   };
 
@@ -204,10 +211,10 @@ function Progress() {
       .collection("DailyFood")
       .where("id", "==", foodId)
       .get();
-   itemR.forEach((doc) => {
-    const docRef = usersDB.doc(userID).collection("DailyFood").doc(doc.id);
-    docRef.delete();
-  });
+    itemR.forEach((doc) => {
+      const docRef = usersDB.doc(userID).collection("DailyFood").doc(doc.id);
+      docRef.delete();
+    });
     // returns a list without foodId
     setDailyFood(dailyFood.filter((item) => item.id !== foodId));
     alert("Item deleted");
@@ -218,7 +225,6 @@ function Progress() {
   if (userDataIsRetrieved == false) {
     getUserInfo();
   }
-
 
   // weight input field only accepts numbers
   const onChanged = (text) => {
@@ -234,7 +240,6 @@ function Progress() {
     }
     setWeight(newText);
   };
-
 
   //Validates weight input
   function validateWeightInput(weight) {
@@ -414,7 +419,7 @@ function Progress() {
                   >
                     <View style={styles.centeredView}>
                       <View style={styles.modalView}>
-                      <Text style={styles.modalText}>Edit</Text>
+                        <Text style={styles.modalText}>Edit</Text>
 
                         <View style={styles.buttons}>
                           <Pressable
@@ -455,13 +460,14 @@ function Progress() {
                 >
                   <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                    <Text style={styles.inputHeader}>Enter Food</Text>
+                      <Text style={styles.inputHeader}>Enter Food</Text>
 
                       <TextInput
+                        style={styles.weightInput}
                         placeholder="food"
                         returnKeyType="done"
-                        value={editedFood}
                         onChangeText={(text) => setEditFood(text)}
+                        value={editedFood}
                       />
                       <View style={styles.buttons}>
                         <Pressable
@@ -493,13 +499,14 @@ function Progress() {
                 >
                   <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                    <Text style={styles.inputHeader}>Enter Calories</Text>
+                      <Text style={styles.inputHeader}>Enter Calories</Text>
 
                       <TextInput
+                        style={styles.weightInput}
                         placeholder="calories"
                         returnKeyType="done"
-                        value={editedCalories}
                         onChangeText={(text) => setEditCalories(text)}
+                        value={editedCalories}
                       />
                       <View style={styles.buttons}>
                         <Pressable
@@ -719,7 +726,7 @@ const styles = {
   doneButton: {
     backgroundColor: "#40e0d0",
     width: "48%",
-  }
+  },
 };
 
 export default Progress;

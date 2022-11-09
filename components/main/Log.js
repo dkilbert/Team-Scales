@@ -21,6 +21,8 @@ import {
   faWeightScale,
 } from "@fortawesome/free-solid-svg-icons";
 import uuid from "react-native-uuid";
+//npm install react-native-uuid
+
 export default function Log() {
   // Set today's date to track calories for today
   let today = new Date();
