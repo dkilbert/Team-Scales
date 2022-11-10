@@ -328,7 +328,7 @@ function Progress() {
         setEditModalVisible(false);
     };
 
-    //function to delete food objects
+    //function to delete food inputs
     const handleDelete = (foodId) => {
         const itemRef = usersDB
             .doc(userID)
@@ -342,7 +342,7 @@ function Progress() {
             });
         });
 
-        // returns a list without foodId
+        //loops and returns a list without foodId
         setDailyFood(dailyFood.filter((item) => item.id !== foodId));
         alert("Item deleted");
     };
@@ -353,12 +353,10 @@ function Progress() {
         getUserInfo();
     }
 
-
-    //should allow only number input(currently not in use)
+  //should allow only number input(currently not in use)
     const onChanged = (text) => {
         let newText = "";
         let numbers = "0123456789";
-
         for (var i = 0; i < text.length; i++) {
             if (numbers.indexOf(text[i]) > -1) {
                 newText = newText + text[i];
