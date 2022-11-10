@@ -12,6 +12,7 @@ import { faPen, faTrash,faCheck, faDollarSign, faHandHoldingDollar, faScaleBalan
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import uuid from "react-native-uuid";
+//npm install react-native-uuid
 
 
 function Progress() {
@@ -277,25 +278,7 @@ function Progress() {
 
         setUserDataIsRetrieved(false);
         }
-        function typeNewFood(name, calories) {
-            let timestamp = logDate;
-    
-            newDailyFood = {
-                id: uuid.v4(),
-                name: name,
-                calories: calories,
-                createdAt: timestamp,
-            };
-    
-            // Call updateLog to add this food entered to firebase
-            updateLog();
-            alert("You added: " + name);
-    
-            // Update the state of the component to clear input boxes and show latest food
-            setFood("");
-            setCalories("");
-            changeDailyCalories();
-        }
+        
         // continueList() - This function retrieves more items from the database to display to the user
     const continueList = () => {
         setSplitDailyFood(dailyFood.slice(0,-5));
@@ -306,18 +289,15 @@ function Progress() {
     if (userDataIsRetrieved == false) {
         getUserInfo();
     }
-     // delete a food object from firebase and useState
-
+     
+    //function to edit food object
      const handleEditFood = async (id, editedFood) => {
         let mydoc = await usersDB
             .doc(userID)
             .collection("DailyFood")
             .where("id", "==", id)
             .get();
-        // console.log("==========");
-        // console.log(mydoc);
-        //console.log("=========");
-
+       
         mydoc.forEach((doc) => {
             const docRef = usersDB.doc(userID).collection("DailyFood").doc(doc.id);
             console.log("==========");
@@ -325,20 +305,19 @@ function Progress() {
             console.log("=========");
             docRef.update({ name: editedFood });
         });
-
+//update usestate
         getUserInfo();
         setIsInnerModalVisible(false);
     };
-
+ 
+    //function to edit calorie//can be reduced to fewer lines
     const handleEditCalorie = async (id, editedCalories) => {
         let mydoc = await usersDB
             .doc(userID)
             .collection("DailyFood")
             .where("id", "==", id)
             .get();
-        // console.log("==========");
-        //  console.log(mydoc);
-        //  console.log("=========");
+       
         mydoc.forEach((doc) => {
             const docRef = usersDB.doc(userID).collection("DailyFood").doc(doc.id);
 
@@ -349,6 +328,7 @@ function Progress() {
         setEditModalVisible(false);
     };
 
+    //function to delete food objects
     const handleDelete = (foodId) => {
         const itemRef = usersDB
             .doc(userID)
@@ -373,6 +353,8 @@ function Progress() {
         getUserInfo();
     }
 
+
+    //should allow only number input(currently not in use)
     const onChanged = (text) => {
         let newText = "";
         let numbers = "0123456789";
@@ -387,6 +369,7 @@ function Progress() {
         setWeight(newText);
     };
 
+    //should validate weight input(currently not used)
     function validateWeightInput(weight) {
         let errorMsg = "Input field cannot be empty";
         let isError = false;
