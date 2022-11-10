@@ -20,7 +20,9 @@ import {
   faUtensils,
   faWeightScale,
 } from "@fortawesome/free-solid-svg-icons";
-import uuid from "react-native-uuid";
+import uuid from "react-native-uuid";//assigns id to food objects
+//npm install react-native-uuid
+
 export default function Log() {
   // Set today's date to track calories for today
   let today = new Date();
@@ -140,7 +142,7 @@ export default function Log() {
     let timestamp = logDate;
 
     newDailyFood = {
-      id: uuid.v4(),
+      id: uuid.v4(), //assign uuid to food
       name: name,
       calories: calories,
       createdAt: timestamp,
