@@ -754,19 +754,19 @@ function Progress() {
                           </View>
                         </Modal>
                       </View>
-                    )}
+                    }
                     //onEndReached = {() => continueList(startIndex, endIndex)}
                     //onEndReachedThreshold = {1}
                     //keyExtractor = {(item, index) => index.toString()}
                   />
-                )}
+                }
               </React.Fragment>
             </View>
           </View>
         </SafeAreaView>
       </ScrollView>
     </LinearGradient>
-  );
+  )
 }
 
 const styles = {
@@ -942,6 +942,6 @@ const styles = {
   blank: {
     opacity: 0,
   },
-};
+}
 
 export default Progress;
