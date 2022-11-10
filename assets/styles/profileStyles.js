@@ -45,7 +45,7 @@ const profileStyles = StyleSheet.create({
         marginBottom: '10%',
         width: 200,
         height: 200,
-        borderRadius: 100,
+        borderRadius: 2,
     },
     profileData:
     {
@@ -74,6 +74,8 @@ const profileStyles = StyleSheet.create({
     profileRow:
     {
         flexDirection: 'row',
+        justifyContent: "center",
+        marginBottom: "5%"
         //marginLeft: 20,
     },
     heightInput:
